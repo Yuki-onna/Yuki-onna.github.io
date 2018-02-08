@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="近期找到了1个新的工作的地方,在这里同事都是90后还算比较好说话,不过这里的一些技术就不多说了,习惯使用Python版本2.7的我竟然要写3.5的代码,说起来也是心累,坑多。另外,在这里采用的Web框架竟然是TurboGears2,1个不怎么好用,且知名度也咋地的框架。    安装与运行在Turbo">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="TurboGears入门">
+<meta name="twitter:description" content="近期找到了1个新的工作的地方,在这里同事都是90后还算比较好说话,不过这里的一些技术就不多说了,习惯使用Python版本2.7的我竟然要写3.5的代码,说起来也是心累,坑多。另外,在这里采用的Web框架竟然是TurboGears2,1个不怎么好用,且知名度也咋地的框架。    安装与运行在Turbo">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+TurboGears入门 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">TurboGears入门</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/web/">web</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Dec 17, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>近期找到了1个新的工作的地方,在这里同事都是90后还算比较好说话,不过这里的一些技术就不多说了,习惯使用Python版本2.7的我竟然要写3.5的代码,说起来也是心累,坑多。<br/>
+另外,在这里采用的Web框架竟然是TurboGears2,1个不怎么好用,且知名度也咋地的框架。    </p>
+
+<h2>安装与运行</h2>
+
+<p>在TurboGears2中,运行这个Web主要有2种方式,1种是最简单的模式,类似Flask那种单文件的形式,其代码类似如下:  </p>
+
+<pre><code>from wsgiref.simple_server import make_server  
+from tg import expose, TGController, AppConfig  
+
+class RootController(TGController):  
+  @expose()  
+  def index(self):  
+      return &quot;&lt;h1&gt;Hello World&lt;/h1&gt;&quot;  
+
+config = AppConfig(minimal=True, root_controller=RootController())  
+
+print &quot;Serving on port 8080...&quot;  
+httpd = make_server(&#39;&#39;, 8080, config.make_wsgi_app())  
+httpd.serve_forever()</code></pre>
+
+<p>另1种是全栈的方式,即类似Pyramid、Django那种通过模板生成对应代码的方式,在这里我们需要进行如下的操作:  </p>
+
+<pre>$ virtualenv env  
+$ pip install tg.devtools  
+$ gearbox quickstart myproj  
+</pre>  
+  
+
+<p>在这里,我们先生成虚拟环境,然后安装的是<code>tg.devtools</code>包,然后通过gearbox命令快速生成1个项目,实际上比较类似Pyramid的感觉。<br/>
+接着我们需要对生成的项目进行安装:  </p>
+
+<pre>$ cd myproj  
+$ pip install -e .  
+$ gearbox serve --debug --reload  
+</pre>  
+  
+
+<p>在这里我们进入我们之前生成的项目中,然后进行本地的安装后,使用serve命令进行服务器运行,在这里我们添加来2个选项<code>--debug</code>和<code>--reload</code>开启调试和重载模式,这样就不需要修改代码后重启服务器。<br/>
+在TurboGears中,在类中的函数表示的就是路由中的URL地址,比如上述的index函数,对应于<code>/index</code>这样的路由,使用起来真的有点别扭。    </p>
+
+<h2>模板</h2>
+
+<p>在TurboGears模板中,其模板采用的是Kajiki模板语言,1种XML的模板语言。实话说,这个模板极其繁琐,因为如果你的HTML代码写的不完整就无法通过,比如:  </p>
+
+<pre><code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code></pre>
+
+<p>在这个单标签中中,由于我们没有添加斜杠会导致模板运行时出现如下的错误<code>mismatched tag</code>:  </p>
+
+<pre>kajiki.xml_template.XMLTemplateParseError: [/home/dog/proj/proj/templates/master.xhtml:13] mismatched tag  
+</pre>  
+  
+
+<p>可以看到,其错误情况是标签不匹配。我们需要对错误之前的标签进行查看才能进行排查。其正常的写法如下:  </p>
+
+<pre><code>&lt;meta charset=&quot;UTF-8&quot; /&gt;</code></pre>
+
+<p>另外1种情况就是标签中属性不完整会出现类似如下的错误<code>not well-formed (invalid token)</code>:  </p>
+
+<pre>kajiki.xml_template.XMLTemplateParseError: [/home/dog/proj/proj/templates/master.xhtml:46] not well-formed (invalid token)  
+</pre>  
+  
+
+<p>不过这种情况错误出现在对应的行上。在这里我们的HTML源代码为:  </p>
+
+<pre><code>&lt;input type=&quot;text&quot; required&gt;</code></pre>
+
+<p>对应这种情况我们需要将其属性补全,例如上面需要修改为:  </p>
+
+<pre><code>&lt;input type=&quot;text&quot; required=&quot;required&quot;&gt;</code></pre>
+
+<p>另外,默认的静态文件是放在public目录下,在模板进行进行如下的操作即可:  </p>
+
+<pre><code>&lt;img src=&quot;${tg.url(&#39;/img/1.jpg&#39;)}&quot;/&gt;</code></pre>
+
+<p>这样它就会查找<code>public/img</code>目录下的对应的图片了。    </p>
+
+<h2>请求参数</h2>
+
+<p>在TurboGears中请求参数,比如GET和POST请求可以通过如下的方式来获取:  </p>
+
+<pre><code>from tg import request  
+print(request.args_params)</code></pre>
+
+<p>在这里我们导入request对象,其代表Request对象,主要封装在<code>tg.request_local</code>模块中。对于GET和POST参数,主要通过该对象的<code>args_params</code>属性来获取的。    </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="http://www.turbogears.org/">http://www.turbogears.org/</a><br/>
+<a href="https://turbogears.readthedocs.io/en/latest/turbogears/kajiki-xml-templates.html">https://turbogears.readthedocs.io/en/latest/turbogears/kajiki-xml-templates.html</a><br/>
+<a href="https://turbogears.readthedocs.io/en/latest/reference/classes.html#tg.request_local.Request">https://turbogears.readthedocs.io/en/latest/reference/classes.html#tg.request_local.Request</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

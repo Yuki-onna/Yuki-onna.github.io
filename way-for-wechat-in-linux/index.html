@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="实话说,对于我这种只喜欢敲命令行的Python程序员来说,自然而言使用Linux的频率远远高于Windows,虽然买得起MBP,但是不怎么习惯其操作。然而,有些时候很揪心的事情,就是要使用微信这样的工具进行项目的交流,于是就开启了走向1条不归的死路。    初级死法首先最简单的方式,自然是打开浏览器">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="在Linux上运行微信的N种死法">
+<meta name="twitter:description" content="实话说,对于我这种只喜欢敲命令行的Python程序员来说,自然而言使用Linux的频率远远高于Windows,虽然买得起MBP,但是不怎么习惯其操作。然而,有些时候很揪心的事情,就是要使用微信这样的工具进行项目的交流,于是就开启了走向1条不归的死路。    初级死法首先最简单的方式,自然是打开浏览器">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+在Linux上运行微信的N种死法 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">在Linux上运行微信的N种死法</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/linux/">linux</a></span>
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Apr 24, 2017</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>实话说,对于我这种只喜欢敲命令行的Python程序员来说,自然而言使用Linux的频率远远高于Windows,虽然买得起MBP,但是不怎么习惯其操作。然而,有些时候很揪心的事情,就是要使用微信这样的工具进行项目的交流,于是就开启了走向1条不归的死路。    </p>
+
+<h2>初级死法</h2>
+
+<p>首先最简单的方式,自然是打开浏览器,然后输入<code>https://web.wechat.com/</code>,然后使用手机端扫码登录。谁让官方不提供Linux的版本呢?<br/>
+有些时候,感觉这种死法过于无聊,于是打开Chrome浏览器,还是输入那个网址,接着进行如下的操作:  </p>
+
+<p><img src="../static/linux/chrome-wechat.png" alt="chrome"/>  </p>
+
+<p>喔噻,竟然弹出了个对话框。<br/>
+点击添加后,桌面竟然出现了快捷方式,好犀利。    </p>
+
+<h2>中级死法</h2>
+
+<p>上面初级的死法,实在不够刺激。想直接复制图片都不行,死活要你安装什么扩展,太low,太不爽了。那么,不妨我们换种死法,试试crosswalk。<br/>
+crosswalk是什么鬼,怎么压根就没有听说过。实际上它是1个混合应用的实现,关于如何操作可以查阅<a href="http://52sox.com/use-crosswalk-build-a-hybrid-application/">使用crosswalk构建混合应用</a>。<br/>
+操作完成后,我们可以看到类似如下的页面:  </p>
+
+<p><img src="../static/linux/wechat.png" alt="wechat"/>  </p>
+
+<p>看起来好强悍的样子,试试才行。然后直接复制就可以把图片也直接发送了,不错不错。<br/>
+最近学了下nw.js,那么自己封装下试试:  </p>
+
+<pre>npm install nw</pre>  
+  
+
+<p>然后新建1个目录:  </p>
+
+<pre>mkdir Wechat</pre>  
+  
+
+<p>之后在这个目录中新建1个<code>package.json</code>和<code>index.html</code>这2个文件,其中<code>package.json</code>中的内容如下:  </p>
+
+<pre><code>{  
+    &quot;name&quot;: &quot;微信&quot;,  
+    &quot;main&quot;: &quot;app.html&quot;,  
+    &quot;author&quot;: &quot;Fly&quot;,  
+    &quot;window&quot;: {  
+        &quot;title&quot;: &quot;微信&quot;,  
+        &quot;resizable&quot;: false,  
+        &quot;toolbar&quot;: false,  
+        &quot;width&quot;: 1000,  
+        &quot;height&quot;: 700  
+    }  
+}</code></pre>
+
+<p>而<code>app.html</code>文件中的内容如下:  </p>
+
+<pre><code>&lt;style&gt;  
+html,body{  
+ height:100%;  
+}  
+&lt;/style&gt;  
+&lt;iframe src=&quot;https://web.wechat.com/&quot; height=&quot;100%&quot; width=&quot;100%&quot; &gt;</code></pre>
+
+<p>最后我们进行打包:  </p>
+
+<pre>nw WeChat</pre>  
+  
+
+<p>这样就生成了1个可执行的文件了,运行就好了。    </p>
+
+<h2>高级死法</h2>
+
+<p>对于Python程序员来说,为何不用召唤python来玩下呢?<br/>
+来来来,我们装个cefpython3玩玩,就4行代码搞定的事情:  </p>
+
+<pre><code>from cefpython3 import cefpython as cef  
+cef.Initialize()  
+cef.CreateBrowserSync(url=&quot;https://web.wechat.com/&quot;,  
+                      window_title=&quot;wechat&quot;)  
+cef.MessageLoop()</code></pre>
+
+<p>现在运行下,哈哈,召唤成功。<br/>
+如果觉得丑,那就套层GTK或Qt咯,只要你有想法,没有做不到的。<br/>
+实话说,cefpython3好难用哦,那试试python-webkit咯,你要用GTK还是Qt呢,不要犹豫了,都上吧。<br/>
+说句心里话,我只是要聊天功能而已,何必搞这么多。那试试<a href="https://github.com/sbwtw/pidgin-wechat">pidgin-wechat</a>。<br/>
+哎,怎么介绍的东西,体验性都这么不好,还有没有其他刺激一点的,那只好试试<a href="https://link.zhihu.com/?target=https%3A//github.com/shufenghui/electron-wechat/releases">electron-wechat</a>了。<br/>
+实话说,无论是wechat还是网易云音乐的官方版本,都是使用nw.js构建的,那么不如直接上nodejs的electron把。只是打包之后100多M,实在不怎么喜欢,我还是召唤我的python把。      </p>
+
+<h2>终极死法</h2>
+
+<p>哎,上述的死法说来说去,都是离不开Wechat的Web版本。如果能体验原生的方式就好了,那为何不用wine呢?<br/>
+还是踏踏实实装个虚拟机,Virtualbox也好VMWare也好,再装个XP SP3的系统就好了。<br/>
+于是,我就这样躺枪,倒下了。</p>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

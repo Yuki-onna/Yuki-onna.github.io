@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="线性代数的核心问题是解联立线性方程组。未知数的个数与方程的个数相等的联立方程组,是最重要的也是最简单的,我们就从这样的联立方程组讲起。而对于解联立方程组,主要有如下2种不同的方法:  消去法Cramer(克莱姆)规则对于消去法,先消去第1个方程以外各方程中的第1个未知数。其操作如下:  从每个方程中">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="高斯消元法">
+<meta name="twitter:description" content="线性代数的核心问题是解联立线性方程组。未知数的个数与方程的个数相等的联立方程组,是最重要的也是最简单的,我们就从这样的联立方程组讲起。而对于解联立方程组,主要有如下2种不同的方法:  消去法Cramer(克莱姆)规则对于消去法,先消去第1个方程以外各方程中的第1个未知数。其操作如下:  从每个方程中">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+高斯消元法 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">高斯消元法</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/math/">math</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Sep 19, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>线性代数的核心问题是解联立线性方程组。未知数的个数与方程的个数相等的联立方程组,是最重要的也是最简单的,我们就从这样的联立方程组讲起。<br/>
+而对于解联立方程组,主要有如下2种不同的方法:  </p>
+
+<ul>
+<li>消去法<br/></li>
+<li>Cramer(克莱姆)规则<br/></li>
+</ul>
+
+<p>对于<strong>消去法</strong>,先消去第1个方程以外各方程中的第1个未知数。其操作如下:  </p>
+
+<ol>
+<li>从每个方程中减去第1个方程的适当倍数,这样我们就得到1个n-1个未知数,n-1个方程的方程组。<br/></li>
+<li>对新得到的变小的方程组再应用上述的方法。<br/></li>
+<li>重复上述方法,直到得到1个未知数1个方程的方程组,此时得到了方程组的解。<br/></li>
+<li>通过反向代入的方式回推方法带入到原方程中,求出所有的未知数。<br/></li>
+</ol>
+
+<p>可以发现这个重复的过程完全可以通过程序来实现。<br/>
+而对于第2种方法,则更为理论一些,需要用到行列式,得到的是精确解,是2个n阶行列式的比,这个比称为<strong>Cramer</strong>规则。<br/>
+事实上,对于数值大的n,Cramer规则不可能实际应用,而对于实际中遇到的方程组,即使n够大,消去法也可以求出它的解来。一般情况下,我们称第1种方法为Gauss(高斯)消去法。<br/>
+Gauss消去法很简单,可能在以往的学习或考试中你已经很熟悉了,但是这里我们将注意力放在消去法本身及以下的4点:  </p>
+
+<ol>
+<li>消去法可以解释为系数矩阵的因式分解。我们引入联立方程组的矩阵表示,将n个未知数记为向量x,而将n个常数记为向量b,而全体系数为矩阵A,那么联立方程组可以表示为Ax=b。在这样的表示方法下,消去法相当于把矩阵A分解为下三角矩阵L和上三角矩阵U的乘机LU。<br/></li>
+<li>在大多数情况下,消去法可以原样应用,不产生任何困难就可以得到方程组的解。但是有1个情况是例外的:<br/>
+
+<ul>
+<li>方程在组中的次序要变动,只有变动之后才可以得到方程组的解<br/></li>
+<li>方程组Ax=b除了唯一解外,可以无解,也可能有无穷多解。通过消去法本身可以判断出是无解还是无穷多解。<br/></li>
+</ul></li>
+<li>使用消去法解方程组时,有必要对所需的算术运算次数进行估计。在许多实际问题中,所引进的未知数的个数都是由数学模型的准确程度和运算次数共同决定的。<br/></li>
+<li>需要直观的考察舍入误差对解x的影响是否显著,对于影响显著的问题,就应当设法控制舍入误差,否则经过成千上万次的运算后所得到的解却发现完全没有意义。<br/></li>
+</ol>
+
+<p>下面我们来看1个简单的例子,1个三维方程组:  </p>
+
+<pre>  
+2u+v+w = 1  
+4u+v   = -2  
+-2u+2v+w=7  
+</pre>  
+  
+
+<p>下面我们用Gauss消去法来求解未知数u,v和w的值。做法是从第2个第3个方程中减去第1个方程的适当倍数,使得第2和第3个方程中的u被消去,换句话说进入如下的操作:  </p>
+
+<ul>
+<li>从第2个方程中减去第1个2倍<br/></li>
+<li>从第3个方程中减去第1个的-1倍<br/></li>
+</ul>
+
+<p>结果我们得到了等价的方程组:  </p>
+
+<pre>  
+2u+v+w = 1  
+-v-2w  = -4  
+3v+2w  = 8  
+</pre>  
+  
+
+<p>第1个方程中的u的系数2称为消去法第1步的主元素。<br/>
+而消去法的第2步不考虑第1个方程,剩下的是含有未知数v和w的2个方程。对这2个方程我们按照第1步再进行消去,这一步得到的主元是-1。<br/>
+接着,我们要从其余的方程中减去第2个方程的倍数,这里只有1个第3个方程了,以此消去v,我们进行如下的操作,从第3个方程中减去第2个方程的-3倍,正向消去已经完成了。结果得到了1个化简了的方程组:  </p>
+
+<pre>  
+2u+v+w = 1  
+-v-2w  = -4  
+-4w    = -4  
+</pre>  
+  
+
+<p>此时该方程组的解法很明显,我们由最后1个方程可以得到<code>w=1</code>。将w带入第2个方程得到<code>v=2</code>,而将<code>w=1</code>和<code>v=2</code>代入第1个方程得到<code>u=-1</code>。我们将这个代入的过程称为<strong>反向代入</strong>。<br/>
+我们可以将上述的求解过程推广到n个未知数n个方程的情形,不论n有多大都可以。<br/>
+下面我们来总结下Gauss消去法的操作过程:  </p>
+
+<ol>
+<li>第1步利用第1个方程的倍数消去第1个主元素正下方的所有系数。<br/></li>
+<li>第2步消去第2列中第2个主元素正下方的所有系数,以此类推。<br/></li>
+<li>最后得到1个含有1个未知数的1个方程。<br/></li>
+<li>我们反向代入按反次序得到答案,最先得到的是最后1个未知数,然后是倒数第2个,最后是第1个未知数。<br/></li>
+</ol>
+
+<p>下面我们来看2个问题,通过这2个问题会让我们对消去法本身有更进一步的理解。<br/>
+第1个问题是,用消去法一定能得到方程组的解吗?在什么条件下消去法是行不通的?<br/>
+其结果是,如果主元素都不为零,那么方程组就有唯一解,可用正向消去和反向代入求得。而当遇到主元素为零的情况,那么消去法就无法进行了。<br/>
+需要注意的是,即使构成主元素的系数在原方程中本来不为0,经过消去法的一步或几步之后也可能遇到为0的主元素。因此我们可以粗略地说,不到消去法进行到最后一步,我们都无法回答主元素是不是都不为0。<br/>
+而当遇到主元素为0时,在多数情况下,经过调整,仍然可以用消去法求得方程组的唯一解。当然,无法方程组无解或者有无穷多解时,消去法肯定是不能进行到底的。<br/>
+当遇到为零的主元素时,我们需要将它所在的方程与下面的方程对调,然后继续进行消去。<br/>
+第2个问题很实际,是关于算题费用的。我们通过消去法解n个未知数n个方程的方程组,需要进行多少次算术运算?<br/>
+如果n很大,那就必须由计算机来完成消去法,由于步骤是事先知道的,因而也能够事先计算出所需的机器时间。<br/>
+我们先暂时不管方程组右端的部分,只对左端所需的计算次数进行估算。这里的运算主要有2类:  </p>
+
+<ul>
+<li>除法,用于确定从主元下面的方程中应减去主元所在方程的倍数,比如l倍。<br/></li>
+<li>先乘后减<br/></li>
+</ul>
+
+<p>在进行2个方程相减时,我们要做的是<strong>先乘后减</strong>,即用上面提到的l乘以主元所在的方程,再从主元下面的方程中减去乘上了l的主元所在方程。<br/>
+我们约定把每1个除法和每1个先乘后减的过程称为1次<strong>运算</strong>。<br/>
+第1步时,第1个方程的长度是n,每消去第1列的1个元素,需要做n次运算,其中求倍数需要1次操作,而算出被消去元素所在行的新元素需要n-1次。<br/>
+此时,第1行下面共有<code>n-1</code>行,要消去的元素是<code>n-1</code>个。因此,消去法第1步要进行n(n-1)次运算。在完成了第1步后,第1行第1列可以先暂时不管。<br/>
+接着我们进行第2步时,方程和未知数的个数都是n-1。接下去每做1步方程和未知数的个数都减1,运算次数也随之减小。到剩下k个未知数k个方程时,消去主元素正下方元素所需的运算次数是k(k-1)。<br/>
+因此,方程组左边部分所需的算术运算总次数P为:  </p>
+
+<p><img src="../static/math/1.jpg" alt="1.jpg"/>  </p>
+
+<p>需要注意的是,最后一步,即1个未知数1个方程时,不需要进行计算,我们可以算出和数P的大小为:  </p>
+
+<p><img src="../static/math/2.jpg" alt="2.jpg"/>  </p>
+
+<p>我们可以用微积分来检验所得结果。x平方从0到n的积分为(n<sup>3)</sup> / 3,而x从0到1的积分为(n<sup>2)</sup> / 2,恰好是2个和号下结果的主项。如果n足够大,那么P约等于(n<sup>3)</sup> / 3就是运算次数的1个很好的估计量。<br/>
+而反向代入所需运算次数的计算要容易得多。求最后1个未知数所需运算次数为1,而求倒数第2个未知数所需运算次数为2(1个先乘后减1个除)。类推,求倒数第k个未知数所需运算次数为k。<br/>
+因此反向代入所需总运算次数Q为:  </p>
+
+<p><img src="../static/math/3.jpg" alt="3.jpg"/>  </p>
+
+<p>因此,人们曾经认为求解一般n解方程组所需的乘法运算的次数不可能少于(n<sup>3)</sup> / 3。而实际上,人们找到了1个方法,对于消去法来说需要进行Cn<sup>log2(7)次运算,而常量C比较大,且所需进行的加法次数比较多,而计算机程序又太打杂,因此新方法的重大意义还只是理论上的,实践上代替不了消去法。</sup>    </p>
+
+<p>参考书籍:  </p>
+
+<blockquote>
+<p>《线性代数及其应用(G.Strang)》P1-5  </p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

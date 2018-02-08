@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="2个PKI应用程序之间想要进行交互,只有互相理解对方发来的数据的比特含义才行。标准提供了数据语法和语义的共同约定。最流行的PKI应用程序标准是X.509标准,因为它定义了公钥证书的基本结构。RSA实验室的PKCS标准是定义数据比特含义的主要标准。这些标准定义了如何恰当地格式化私钥或者公钥。其他重要的">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="PKI格式标准">
+<meta name="twitter:description" content="2个PKI应用程序之间想要进行交互,只有互相理解对方发来的数据的比特含义才行。标准提供了数据语法和语义的共同约定。最流行的PKI应用程序标准是X.509标准,因为它定义了公钥证书的基本结构。RSA实验室的PKCS标准是定义数据比特含义的主要标准。这些标准定义了如何恰当地格式化私钥或者公钥。其他重要的">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+PKI格式标准 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">PKI格式标准</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/cryptography/">cryptography</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Aug 23, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>2个PKI应用程序之间想要进行交互,只有互相理解对方发来的数据的比特含义才行。标准提供了数据语法和语义的共同约定。<br/>
+最流行的PKI应用程序标准是X.509标准,因为它定义了公钥证书的基本结构。RSA实验室的PKCS标准是定义数据比特含义的主要标准。这些标准定义了如何恰当地格式化私钥或者公钥。<br/>
+其他重要的标准包括PKIX证书和CRL概要文件、IEEE P1363项目对密码算法的定义以及IETF工作组研究的XML数字签名。    </p>
+
+<h2>X.509</h2>
+
+<p>X.509是国际电信联盟-电信ITU-T部分标准和国际标准化组织ISO的证书格式标准。<br/>
+作为ITU-ISO目录服务系列标准的一部分,X.509定义了公钥证书结构的基本标准。<br/>
+该标准于1988年首次发布,1993和1996年2次修订,当前版本是X.509v3。它加入了扩展字段支持,这极大地增进了证书的灵活性。<br/>
+X.509v3证书包括一组按预定义顺序排列的强制字段,还有可选扩展字段。即使在强制字段中,X.509证书也允许很大的灵活性,因为它为大多数字段提供了多种编码方案。    </p>
+
+<h2>PKIX</h2>
+
+<p>IETF的安全领域的公钥基础设施PKIX工作组正在为互联网上使用的公钥证书定义一系列的标准。<br/>
+PKIX工作组在1995年10月形成,目的是要开发必须的互联网标准来支持可互操作的PKI。工作组的第1项任务是要创建1个概要文件,把证书数据结构、扩展域和数据取值限定在1个特定的可选范围内。<br/>
+X.509标准的巨大灵活性使得互操作难以实现,PKIX工作组希望通过限制允许的选项,提供PKI系统间的互操作性。<br/>
+PKIX工作组定义了公钥证书及CRL的概要文件。在一些情况下,它还定义了其他的证书扩展字段或证书属性,还有这些属性的对象标识。<br/>
+PKIX也正在开发新的协议以便于PKI生命周期中自始至终对PKI信息的管理。其中包括证书管理协议CMP,安全多用途邮件扩展S/MIME和在线证书状态协议OCSP。    </p>
+
+<h2>IEEE P1363</h2>
+
+<p>IEEE的P1363项目开始于1994年,目的是开发密码学标准,包括公钥密码学的标准规范。项目开始时只是规定了RSA和Diffie Hellman算法的数学原语和密码技术,后来扩宽了其研究领域,又加入了椭圆曲线密码系统。<br/>
+尽管P1363工作组的工作不局限于格式标准的制定,但该标准的制定对保证PKI户操作性非常重要,因为它为不同算法系统,比如离散对数、整数因数分解、椭圆曲线提供了一系列通用公钥技术的参考规范,这些技术包括如密钥协定、公钥加密、数学签名和身份认证。<br/>
+它还涉及需要考虑的相关密码问题,如密钥管理和安全随机数生成。     </p>
+
+<h2>PKCS</h2>
+
+<p>公钥密码标准PKCS最初是推进公钥密码系统的互操作性,它是由RSA实验室与工业界、学术界和政府代表合作开发的。<br/>
+在RSA带领下,PKCS的研究随着时间不断发展,它涉及了不断发展的PKI格式标准、算法和应用程序接口。<br/>
+PKCS标准提供了基本的数据格式定义和算法定义,它们实际是今天所有PKI实现的基础。<br/>
+PKCS的标准如下所示。   </p>
+
+<h3>PKCS#1 RSA加密标准</h3>
+
+<p>PKCS#1定义了RSA公钥函数的基本格式标准,特别是数字签名。<br/>
+它定义了数字签名如何计算,包括待签名数据和签名本身的格式,它也定义了RSA公/私钥的语法。     </p>
+
+<h3>PKCS#2</h3>
+
+<p>PKCS#2涉及了RSA的消息摘要加密,这已被并入PKCS#1中。     </p>
+
+<h3>PKCS#3 Diffie-Hellman密钥协议标准</h3>
+
+<p>PKCS#3描述了1种实现Diffie-Hellman密钥协议的方法。     </p>
+
+<h3>PKCS#4</h3>
+
+<p>PKCS#4最初是规定RSA密钥语法的,现在已经被包含进PKCS#1中。     </p>
+
+<h3>PKCS#5 基于口令的加密标准</h3>
+
+<p>PKCS#5描述了使用由口令生成的密钥来加密8位位组串并产生1个加密的8位位组串的方法。PKCS#5可以用于加密私钥,以便于密钥的安全传输(这在PKCS#8中描述)。     </p>
+
+<h3>PKCS#6 扩展证书语法标准</h3>
+
+<p>PKCS#6定义了提供附加实体信息的X.509证书属性扩展的语法。<br/>
+当PKCS#6第1次发布时,X.509还不支持扩展。这些扩展因此被包括在X.509中。     </p>
+
+<h3>PKCS#7 密码消息语法标准</h3>
+
+<p>PKCS#7为使用密码算法的数据规定了通用语法,比如数字签名和数字信封。<br/>
+PKCS#7提供了许多格式选项,包括未加密或签名的格式化消息、已封装(加密)消息、已签名的消息和既经过签名又经过加密的消息。     </p>
+
+<h3>PKCS#8  私钥信息语法标准</h3>
+
+<p>PKCS#8定义了私钥信息语法和加密私钥语法,其中私钥加密使用了PKCS#5标准。     </p>
+
+<h3>PKCS#9  可选属性类型</h3>
+
+<p>PKCS#9定义了PKCS#6扩展证书、PKCS#7数字签名消息、PKCS#8私钥信息和PKCS#10证书签名请求中要用到的可选属性类型。<br/>
+已定义的证书属性包括e-mail地址、无格式姓名、内容类型、消息摘要、签名时间、签名副本(counter signature)、质询口令字和扩展证书属性。     </p>
+
+<h3>PKCS#10  证书请求语法标准</h3>
+
+<p>PKCS#10定义了证书请求的语法。证书请求包含了1个唯一识别名、公钥和可选的一组属性,它们一起被请求证书的实体签名。<br/>
+证书管理协议中的PKIX证书请求消息就是1个PKCS#10。     </p>
+
+<h3>PKCS#11 密码令牌接口标准</h3>
+
+<p>PKCS#11或Cryptoki为拥有密码信息(如加密密钥和证书)和执行密码学函数的单用户设备定义了1个应用程序接口(API)。<br/>
+智能卡就是实现Cryptoki的典型设备。注意Cryptoki定义了密码函数接口,并未指明设备具体如何实现这些函数。<br/>
+而且Cryptoki只说明了密码接口,并未定义对设备来说可能有用的其他接口,如访问设备的文件系统接口。     </p>
+
+<h3>PKCS#12 个人信息交换语法标准</h3>
+
+<p>PKCS#12定义了个人身份信息(包括私钥、证书、各种秘密和扩展字段)的格式。<br/>
+PKCS#12有助于传输证书及对应的私钥,于是用户可以在不同设备间移动他们的个人身份信息。   </p>
+
+<h3>PKCS#13 椭圆曲线密码标准</h3>
+
+<p>PKCS#13标准当前正在开发,它包括椭圆曲线参数的生成的验证、密钥生成和验证、数字签名和公钥加密,还有密钥协定以及参数、密钥和方案标识的ASN.1语法。     </p>
+
+<h3>PKCS#14 伪随机数产生标准</h3>
+
+<p>PKCS#14标准当前正在开发。为什么随机数生成也需要建立自己的标准?<br/>
+PKI中用到的许多基本的密码学函数,如密钥生成和Diffie-Hellman共享密钥协商,都需要使用随机数。<br/>
+然而,如果随机数不是随机的,而是取自1个可预测的取值集合,那么密码学函数就不再是绝对安全的了。因为它的取值被限于1个缩小了的值域中,因此安全伪随机数的生成对于PKI的安全极为关键。     </p>
+
+<h3>PKCS#15 密码令牌信息语法标准</h3>
+
+<p>PKCS#15通过定义令牌上存储的密码对象的通用格式来增进密码令牌的互操作性。<br/>
+在实现PKCS#15的设备上存储的数据对使用该设备的所有应用程序来说都是一样的,尽管实际上在内部实现时可能所用的格式不同。<br/>
+PKCS#15的实现扮演了翻译家的角色,它在卡的内部格式与应用程序支持的数据格式间进行转换。     </p>
+
+<h2>XML</h2>
+
+<p>可扩展标记语言是定义数字数据格式的灵活手段。XML的1个自然用途就是定义签名数据对象的格式。<br/>
+IEFT的XML数字签名工作组意识到这一点,因而正在定义可以增进签名数据对象互操作性的XML元素。<br/>
+IEFT工作的基本思想是XML签名可以被用于任何的数据对象。签名者首先计算数据对象(实际上包括了所有的数据类型)的摘要,把摘要放入1个XML元素,对这个元素计算摘要和数字签名。<br/>
+XML签名元素作为被签名数据的划分标记,也可以包含与签名相关的其他信息,如时间戳。     </p>
+
+<p>参考书籍:  </p>
+
+<blockquote>
+<p>《公钥基础设施PKI:实现和管理电子安全》P198-202</p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

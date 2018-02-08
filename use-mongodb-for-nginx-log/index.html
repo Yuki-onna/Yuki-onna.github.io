@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="在项目开发过程中,总是离不开日志解析的工作,虽然有些时候觉得确实挺繁琐的,但是静下心来会发现有时候也是挺有趣的1件工作。在这里,我们要从日志文件中找出IP访问最多的10条记录,然后判断其是否合法,从而采取对应的措施。    日志解析流程正常情况下,关于Nginx日志解析的流程如下所示:    一般情">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="利用MongoDB分析Nginx日志">
+<meta name="twitter:description" content="在项目开发过程中,总是离不开日志解析的工作,虽然有些时候觉得确实挺繁琐的,但是静下心来会发现有时候也是挺有趣的1件工作。在这里,我们要从日志文件中找出IP访问最多的10条记录,然后判断其是否合法,从而采取对应的措施。    日志解析流程正常情况下,关于Nginx日志解析的流程如下所示:    一般情">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+利用MongoDB分析Nginx日志 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">利用MongoDB分析Nginx日志</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/database/">database</a></span>
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/mongodb/">mongodb</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Nov 30, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>在项目开发过程中,总是离不开日志解析的工作,虽然有些时候觉得确实挺繁琐的,但是静下心来会发现有时候也是挺有趣的1件工作。<br/>
+在这里,我们要从日志文件中找出IP访问最多的10条记录,然后判断其是否合法,从而采取对应的措施。    </p>
+
+<h2>日志解析流程</h2>
+
+<p>正常情况下,关于Nginx日志解析的流程如下所示:  </p>
+
+<p><img src="../static/nginx/workflow.jpg" alt="流程图"/>  </p>
+
+<p>一般情况下我们会对要解析的日志提前进行切分,常用的方式是按照日期,然后保存1个星期的日志。然后接下来就是日志的解析了,在这个过程中会使用到一些工具或编程语言,例如awk、grep、perl、python。<br/>
+最后的入库和可视化处理一般视业务而定,没有强制的要求。    </p>
+
+<h2>日志查询的解决方案</h2>
+
+<p>而关于Nginx日志解析的常用解决方案主要有如下4种方式:  </p>
+
+<ol>
+<li>通过awk和grep进行解析<br/></li>
+<li>通过Postgresql外联表进行日志的映射<br/></li>
+<li>通过Python与MongoDB的组合来进行日志查询<br/></li>
+<li>通过ELK这个开源套件进行查询<br/></li>
+</ol>
+
+<p>其中Postgresql外联表的方式在之前公司的时候已经使用过,当然是对公司多个3GB大小的日志进行处理。而第1种和第4种解决方案没有太多的实践的经验,这里我们主要来看第2种解决方案。    </p>
+
+<h2>日志格式</h2>
+
+<p>关于日志解析处理,我们比较常用的方式是使用正则表达式来进行匹配,而常用的1个库是nginxparser,我们可以直接通过pip进行安装。当然还有其他的方式来进行解析,这个要视业务而定。<br/>
+在日志解析中,比较重要的是日志的格式,默认情况下Nginx的日志格式如下:  </p>
+
+<pre>log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '  
+                   '$status $body_bytes_sent "$http_referer" '  
+                   '"$http_user_agent" "$http_x_forwarded_for"'  
+                   '$upstream_addr $upstream_response_time $request_time;  
+</pre>  
+  
+
+<p>下面我们来看实际业务中的1个应用。之前公司有1个抢微信红包的活动,当然有用户反映好几天都无法抢到1个红包。因此,我们团队成员认为可能在这个过程中存在作弊的现象,因此便决定对Nginx的日志进行解析。详细内容可以点击<a href="http://52sox.com/optimization-of-wechat-red-system/">优化微信红包抢购系统</a>。<br/>
+下面是1条真实的日志的记录:  </p>
+
+<pre>101.226.89.14 - - [10/Jul/2016:07:28:32 +0800] "GET /pocketmoney-2016-XiKXCpCK.html HTTP/1.1" 302 231 "-" "Mozilla/5.0 (Linux; Android 5.1; OPPO R9tm Build/LMY47I) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036548 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN"  
+</pre>  
+  
+
+<h2>日志分析</h2>
+
+<h3>通过awk进行解析</h3>
+
+<p>接着,我们来看下如何使用awk解析出IP访问最多的记录,关于awk语法可以<a href="http://www.math.utah.edu/docs/info/gawk_toc.html">参考</a>进行学习:  </p>
+
+<pre>dog@dog-pc:~$ awk '{a[$1]++}END{for(i in a)print i,a[i]}' nginx.log |sort -t ' ' -k2 -rn|head -n 10  
+111.167.50.208 26794  
+183.28.6.143 16244  
+118.76.216.77 9560  
+14.148.114.213 3609  
+183.50.96.127 3377  
+220.115.235.21 3246  
+222.84.160.249 2905  
+121.42.0.16 2212  
+14.208.240.200 2000  
+14.17.37.143 1993  
+</pre>  
+  
+
+<p>默认情况下,awk以空格作为分隔符号,因此<code>$1</code>将获取到Nginx默认格式中的远程地址。在这里,我们通过定义1个字段,使用IP作为键名,如果对应的键名存在则将其数量加1处理。最后我们遍历这个字典,之后通过数量进行排序,最后通过head获取10条记录。<br/>
+当然这种操作方式是有较大误差的,因为我们没有指定状态码等其他条件,下面我们来看根据状态码和请求方式这2个条件后过滤的数据:  </p>
+
+<pre>dog@dog-pc:~$ awk '{if($9>0 && $9==200 && substr($6,2)== "GET") a[$1]++}END{for(i in a)print i,a[i]}' nginx.log|sort -t ' ' -k2 -rn|head -n 10  
+222.84.160.249 2856  
+183.28.6.143 2534  
+116.1.127.110 1625  
+14.208.240.200 1521  
+14.17.37.143 1335  
+219.133.40.13 1014  
+219.133.40.15 994  
+14.17.37.144 988  
+14.17.37.161 960  
+183.61.51.195 944  
+</pre>  
+  
+
+<p>这样我们就可以将这10个IP进行分析,考虑下一步的操作,比如通过iptables组合禁止该IP的访问或限制其访问的次数等。    </p>
+
+<h3>通过Postgresql</h3>
+
+<p>通过Postgresql入库后使用SQL进行查询的方式可以通过如下2种图片来查看:  </p>
+
+<p><img src="../static/nginx/postgresql_nginx2.jpg" alt="status"/>  </p>
+
+<p>在上图中主要是查看日志中请求状态码的总数量。而下图是对状态码为200的前10条IP的筛选:  </p>
+
+<p><img src="../static/nginx/postgresql_nginx.jpg" alt="ip"/>  </p>
+
+<p>可以看到基本上与上面awk解析的方式一致。    </p>
+
+<h3>通过MongoDB进行查询</h3>
+
+<p>我们知道,MongoDB是1个文档型数据库,通过这个数据库我们辅助解决关系型数据库一些不太擅长的工作。<br/>
+在Python中,主要的MongoDB客户端驱动是PyMongo,我们可以通过如下的方式建立1个连接:  </p>
+
+<pre><code>In [1]: from pymongo import MongoClient  
+In [2]: client = MongoClient()</code></pre>
+
+<p>由于这里我们使用的是默认的端口和地址,因此在MongoClient类中不传入任何的参数。<br/>
+在这里,我们先说下我们插入到MongoDB中日志的格式:  </p>
+
+<pre>  
+{  
+    "status": 302, //HTTP状态码  
+    "addr": "101.226.89.14", //远程IP地址  
+    "url": "-",  
+    "req": "/pocketmoney-2016-XiCXCpCK.html", //请求的地址  
+    "agent": "Mozilla/5.0 (Linux; Android 5.1; OPPO R9tm Build/LMY47I) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036548 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN", //请求的user-agent  
+    "referer": "NetType/WIFI",  
+    "t": "2016/07/10 06:28:32", //请求的时间  
+    "size": 231, //响应的大小  
+    "method": "GET", //请求的方法  
+    "user": "-" //用户名称  
+}  
+</pre>  
+  
+
+<p>在这里我们通过Python进行解析后,组装成如上的格式后插入到MongoDB中,在这里主要用到的是MongoDB文档对象的<code>insert_one</code>方法插入1条记录。    </p>
+
+<pre><code>db = client[&#39;log&#39;]  
+col = db[&#39;nginx&#39;]  
+data = {}  
+...  
+col.insert_one(data)</code></pre>
+
+<p>接着我们开始对上述的记录进行查询操作,主要是通过MongoDB提供的map-reduce来实现聚合操作,其对应的Python代码为:  </p>
+
+<pre><code>In [3]: db = client[&#39;log&#39;]  
+In [4]: col = db[&#39;nginx&#39;]  
+In [5]: pipeline = [  
+    ...: {&quot;$match&quot;:{&quot;status&quot;:200}},  
+    ...: {&quot;$group&quot;:{&quot;_id&quot;:&quot;$addr&quot;,&quot;count&quot;:{&quot;$sum&quot;:1}}},  
+    ...: {&quot;$sort&quot;:{&quot;count&quot;:-1}},  
+    ...: {&quot;$limit&quot;:10}  
+    ...: ]  
+In [6]: list(col.aggregate(pipeline))  
+Out[6]:   
+[{u&#39;_id&#39;: u&#39;222.84.160.249&#39;, u&#39;count&#39;: 2856},  
+ {u&#39;_id&#39;: u&#39;183.28.6.143&#39;, u&#39;count&#39;: 2534},  
+ {u&#39;_id&#39;: u&#39;116.1.127.110&#39;, u&#39;count&#39;: 1625},  
+ {u&#39;_id&#39;: u&#39;14.208.240.200&#39;, u&#39;count&#39;: 1521},  
+ {u&#39;_id&#39;: u&#39;14.17.37.143&#39;, u&#39;count&#39;: 1335},  
+ {u&#39;_id&#39;: u&#39;219.133.40.13&#39;, u&#39;count&#39;: 1014},  
+ {u&#39;_id&#39;: u&#39;219.133.40.15&#39;, u&#39;count&#39;: 994},  
+ {u&#39;_id&#39;: u&#39;14.17.37.144&#39;, u&#39;count&#39;: 988},  
+ {u&#39;_id&#39;: u&#39;14.17.37.161&#39;, u&#39;count&#39;: 960},  
+ {u&#39;_id&#39;: u&#39;183.61.51.195&#39;, u&#39;count&#39;: 944}]</code></pre>
+
+<p>可以看到这个过程与之前的2种方式得到的结果是一致的。    </p>
+
+<h2>关于可视化处理</h2>
+
+<p>关于可视化处理,我们可以选择一些Javascript的库,例如:  </p>
+
+<ul>
+<li>百度的Echarts<br/></li>
+<li>d3.js及其衍生的库<br/></li>
+</ul>
+
+<p>对于Python,可视化处理可以使用如下的一些库:  </p>
+
+<ul>
+<li>matplotlib<br/></li>
+<li>pandas<br/></li>
+</ul>
+
+<p>当然还有一些其他的库这里就不一一叙述了。<br/>
+下面是1个使用百度Echart绘制的界面:  </p>
+
+<p><img src="../static/nginx/visual.jpg" alt="visual" width="800" />  </p>
+
+<p>看起来还是挺漂亮的。    </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="http://api.mongodb.com/python/current/examples/aggregation.html">http://api.mongodb.com/python/current/examples/aggregation.html</a>  </p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

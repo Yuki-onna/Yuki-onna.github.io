@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="有时候,我们可能需要获取Linux系统的版本信息,用于一些特殊的需求。     查看Linux内核版本下面我们介绍一些方法来获取系统的版本,首先是通过查看Linux内核的方法,主要有2种方法:     cat@yafeile-pc:~/wheezy$ cat /proc/version     Li">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="获取Linux系统版本信息">
+<meta name="twitter:description" content="有时候,我们可能需要获取Linux系统的版本信息,用于一些特殊的需求。     查看Linux内核版本下面我们介绍一些方法来获取系统的版本,首先是通过查看Linux内核的方法,主要有2种方法:     cat@yafeile-pc:~/wheezy$ cat /proc/version     Li">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+获取Linux系统版本信息 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">获取Linux系统版本信息</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/linux/">linux</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">May 25, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>有时候,我们可能需要获取Linux系统的版本信息,用于一些特殊的需求。     </p>
+
+<h2>查看Linux内核版本</h2>
+
+<p>下面我们介绍一些方法来获取系统的版本,首先是通过查看Linux内核的方法,主要有2种方法:   </p>
+
+<pre>  
+cat@yafeile-pc:~/wheezy$ cat /proc/version     
+Linux version 4.4.3-1-ARCH (builduser@tobias) (gcc version 5.3.0 (GCC) ) #1 SMP PREEMPT Fri Feb 26 15:09:29 CET 2016    
+</pre>  
+  
+
+<p>我们通过对/proc目录下的version文件进行读取,获取到当前内核的版本信息。而proc目录是1个伪文件系统进程信息,它提供1个接口访问内核数据结构。它通常挂载在<code>/proc</code>,大多数为可读,但是一些文件允许修改内核变量。<br/>
+而<code>/proc/version</code>的结果主要由<code>/proc/sys/kernel/ostype</code>,<code>/proc/sys/kernel/osrelease</code>和<code>/proc/sys/kernel/version</code>这3个文件汇聚而成:   </p>
+
+<pre>cat@yafeile-pc:~$ cat /proc/sys/kernel/ostype    
+Linux    
+cat@yafeile-pc:~$ cat /proc/sys/kernel/osrelease    
+4.4.3-1-ARCH    
+cat@yafeile-pc:~$ cat /proc/sys/kernel/version    
+#1 SMP PREEMPT Fri Feb 26 15:09:29 CET 2016    
+</pre>    
+  
+
+<p>第2种获取内核版本的方式我们可能更为熟悉:   </p>
+
+<pre>cat@yafeile-pc:~/wheezy$ uname -a    
+Linux yafeile-pc 4.4.3-1-ARCH #1 SMP PREEMPT Fri Feb 26 15:09:29 CET 2016 x86_64 GNU/Linux    
+</pre>  
+  
+
+<p>我们通过uname命令输出系统的信息。     </p>
+
+<h2>查看Linux系统版本</h2>
+
+<p>接下来是查看Linux系统版本的方式,主要有3种方法。首先,我们来看1种通用的方式,使用的是<code>lsb_release</code>命令:   </p>
+
+<pre>cat@yafeile-pc:~/wheezy$ lsb_release -a    
+LSB Version:    1.4    
+Distributor ID: Arch    
+Description:    Arch Linux    
+Release:    rolling    
+Codename:   n/a    
+</pre>  
+    
+
+<p>其中<code>lsb_release</code>命令用于打印确定的LSB(Linux Standard Base)和版本信息。这个操作通过对<code>/etc/lsb-release</code>文件中获取<code>LSB_VERSION</code>字段,这个数值为LSB的数字。然后还有可选的<code>DISTRIB_ID</code>、<code>DISTRIB_RELEASE</code>、<code>DISTRIB_CODENAME</code>及<code>DISRRIB_DESCRIPTION</code>可以被用于重写信息。<br/>
+紧接着会查看<code>/etc/[distrib]-release</code>文件包含发行的版本等信息。我们可以使用如下的方式获取包含release的文件有哪些:   </p>
+
+<pre>cat@yafeile-pc:~/wheezy$ ls /etc|grep release    
+arch-release    
+lsb-release    
+os-release    
+</pre>  
+  
+
+<p>然后查看其内容:   </p>
+
+<pre>cat@yafeile-pc:~/wheezy$ cat /etc/arch-release     
+Arch Linux release    
+cat@yafeile-pc:~/wheezy$ cat /etc/lsb-release     
+LSB_VERSION=1.4    
+DISTRIB_ID=Arch    
+DISTRIB_RELEASE=rolling    
+DISTRIB_DESCRIPTION="Arch Linux"    
+</pre>  
+  
+
+<p>下1个通用的方法是查看issue文件:   </p>
+
+<pre>cat@yafeile-pc:~/wheezy$ cat /etc/issue     
+Arch Linux \r (\l)    
+</pre>  
+  
+
+<p>可以看到,这个真的精简很多。<br/>
+下面这种方法只能用于特定的发行版本:   </p>
+
+<pre>cat@debian:~$ cat /etc/debian_version    
+7.10    
+</pre>  
+  
+
+<p>我们通过获取/etc目录下的debian_version文件获取到debian的版本,当前为7.10。另外,os-release文件也包含关于系统的版本信息:   </p>
+
+<pre>cat@debian:~$ cat /etc/os-release     
+PRETTY_NAME="Debian GNU/Linux 7 (wheezy)"    
+NAME="Debian GNU/Linux"    
+VERSION_ID="7"    
+VERSION="7 (wheezy)"    
+ID=debian    
+ANSI_COLOR="1;31"    
+HOME_URL="http://www.debian.org/"    
+SUPPORT_URL="http://www.debian.org/support/"    
+BUG_REPORT_URL="http://bugs.debian.org/"    
+</pre>  
+  
+
+<p>可以看到,这个比上面的内容就详细了很多。     </p>
+
+<p>参考文章:   </p>
+
+<blockquote>
+<p><a href="http://www.linuxidc.com/Linux/2016-05/131749.htm">http://www.linuxidc.com/Linux/2016-05/131749.htm</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

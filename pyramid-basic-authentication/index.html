@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="在Pyramid中实际上是提供了基础认证的,我们可以通过如下的方式进行导入:  from pyramid.authentication import BasicAuthAuthenticationPolicy而在Pyramid中,将安全系统拆分为认证和权限。这里我们来看下最简单的HTTP基础认证(B">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="Pyramid内建基础认证">
+<meta name="twitter:description" content="在Pyramid中实际上是提供了基础认证的,我们可以通过如下的方式进行导入:  from pyramid.authentication import BasicAuthAuthenticationPolicy而在Pyramid中,将安全系统拆分为认证和权限。这里我们来看下最简单的HTTP基础认证(B">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+Pyramid内建基础认证 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">Pyramid内建基础认证</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/pyramid/">pyramid</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Nov 02, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>在Pyramid中实际上是提供了基础认证的,我们可以通过如下的方式进行导入:  </p>
+
+<pre><code>from pyramid.authentication import BasicAuthAuthenticationPolicy</code></pre>
+
+<p>而在Pyramid中,将安全系统拆分为认证和权限。这里我们来看下最简单的HTTP基础认证(BasicAuth Authentication)。<br/>
+对于第1次使用Pyramid的人来说,会觉得这个框架很复杂,当然这话是相当于使用Django、Flask这样的开发人员来说的。<br/>
+在Pyramid中,我们无法单独使用认证,其需要提供1个权限类一起使用,这里我们导入ACL这个权限控制类:  </p>
+
+<pre><code>from pyramid.authorization import ACLAuthorizationPolicy</code></pre>
+
+<p>下面我们来看下完整的代码:  </p>
+
+<pre><code>from pyramid.authentication import BasicAuthAuthenticationPolicy  
+from pyramid.authorization import ACLAuthorizationPolicy  
+from pyramid.config import Configurator  
+from pyramid.httpexceptions import HTTPUnauthorized  
+from pyramid.view import view_config  
+from wsgiref.simple_server import make_server  
+
+
+@view_config(name=&#39;&#39;,renderer=&#39;json&#39;)  
+def index(request):  
+    realm = &#39;You must tell me your measurements or I know you are an adult&#39;  
+    if not req.authenticated_userid:  
+        return HTTPUnauthorized(headers=[(&#39;WWW-Authenticate&#39;, &#39;Basic realm=&quot;%s&quot;&#39; % realm)])  
+    return {&#39;data&#39;:&#39;some data require authenticated.&#39;}  
+
+def callback(username,pwd,req):  
+    users = {  
+        &#39;zhangsan&#39;:&#39;123456&#39;,  
+        &#39;lisi&#39;:&#39;111111&#39;,  
+        &#39;wangwu&#39;:&#39;888888&#39;  
+    }  
+    passwd = users.get(username)  
+    if passwd == pwd:  
+        return True  
+    return None</code></pre>
+
+<p>通过这么近20行的代码,我们已经实现了1个简单的HTTP版本的基础认证。在这里,当认证不通过的时候,我们需要在响应头中返回<code>WWW-Authenticate</code>才会出现类似如下的界面:  </p>
+
+<p><img src="../static/python/basic-auth.jpg" alt="basic-auth"/>  </p>
+
+<p>然后接下来是配置的部分了:  </p>
+
+<pre><code>config = Configurator()  
+basic_policy = BasicAuthAuthenticationPolicy(callback)  
+auth_polocy = ACLAuthorizationPolicy()  
+config.set_authentication_policy(basic_policy)  
+config.set_authorization_policy(auth_polocy)  
+config.scan()  
+app = config.make_wsgi_app()  
+server = make_server(&#39;127.0.0.1&#39;,8000,app)  
+server.serve_forever()</code></pre>
+
+<p>在这里我们通过实例化Configurator生成1个配置对象。然后我们通过<code>set_authentication_policy</code>和<code>set_authorization_policy</code>方法分别设置认证策略和权限策略。<br/>
+在Pyramid中,wsgi应用是通过配置对象的<code>make_wsgi_app</code>方法生成的。<br/>
+需要注意的是,在这里,我们在<code>BasicAuthAuthenticationPolicy</code>类中传入了1个函数的名称,用于回调处理来判断其认证是否成功。如果是自定义认证类,我们是可以在失败的时候返回False的,对于系统内建的基础认证类,我们在回调时只能返回None。<br/>
+上述的写法只是Pyramid中的1种方式,我们还可以通过其他的方式来实现相同的效果。虽然,第1次使用pyramid的时候,会觉得不怎么顺手,但是随着深入学习,你会发现Pyramid其实还是挺灵活的,只是相比Flask、Django这样的框架要写的代码会更多一些。<br/>
+最后,在实例化<code>BasicAuthAuthenticationPolicy</code>类时,我们还可以传入参数debug来开启这个认证类的调试,其结果将记录到日志中。    </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html#pyramid.authentication.BasicAuthAuthenticationPolicy">http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html#pyramid.authentication.BasicAuthAuthenticationPolicy</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

@@ -1,0 +1,587 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="近期公司的APP打算上线,需要集成支付的功能。由于采用的是Python进行开发,因此无法直接使用官方提供的SDK。虽然也有一些集成的第3方可以使用,比如ping++、beecloud。但是由于提供的时间比较充裕,于是就自己实现了1个。在这个过程中,难免遇到一些坑,而这些坑有时会困扰你很久。最初,并没">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="玩转APP支付">
+<meta name="twitter:description" content="近期公司的APP打算上线,需要集成支付的功能。由于采用的是Python进行开发,因此无法直接使用官方提供的SDK。虽然也有一些集成的第3方可以使用,比如ping++、beecloud。但是由于提供的时间比较充裕,于是就自己实现了1个。在这个过程中,难免遇到一些坑,而这些坑有时会困扰你很久。最初,并没">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+玩转APP支付 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">玩转APP支付</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Jul 23, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>近期公司的APP打算上线,需要集成支付的功能。由于采用的是Python进行开发,因此无法直接使用官方提供的SDK。虽然也有一些集成的第3方可以使用,比如<a href="https://www.pingxx.com">ping++</a>、<a href="https://www.beecloud.cn/">beecloud</a>。<br/>
+但是由于提供的时间比较充裕,于是就自己实现了1个。在这个过程中,难免遇到一些坑,而这些坑有时会困扰你很久。<br/>
+最初,并没有打算写这么一篇文章,因为它的适用范围很窄。但是网上搜索到的关于APP支付方面的都是移动端iOS和Android的实现方式,对于服务端的实现寥寥无几。相比而言,python在当前毕竟是小众语言,而如果参考其他语言,比如php的实现,发现这个过程还是有不少地方是没有讲清楚的。<br/>
+虽然对于很多开发者来说,支付这个功能涉及的知识点并不是很多,但是你会发现你却在这里耗费了很多的时间。有时1个签名的问题,就让你无法调用支付,比如支付宝的<code>Alipay10</code>问题,总是出现服务器繁忙的提示,其实就是你的签名出了问题。<br/>
+在这里,由于涉及到公司的一些敏感信息的问题,因此下面代码中的签名用的都是测试数据,而签名是根据已经验证通过的函数调用计算出来的。当你发现自己签名不过时,可以直接复制这些字符串,然后比对下面计算出来的签名来查看你的签名函数及异步回调哪里出了问题。      </p>
+
+<h2>适用范围</h2>
+
+<p>首先为了避免耽误大家的时间,这里我们只实现了<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_1">微信支付</a>及支付宝的<a href="https://doc.open.alipay.com/doc2/detail?treeId=59&amp;articleId=103563&amp;docType=1">移动支付</a>。对于微信公众支付及支付宝的其他支付场景是不适用的。<br/>
+这里,限于篇幅,只对订单支付及异步回调的部分进行说明,因为如果把所有的接口都过一遍,太耗费时间,还不如直接在pypi上上传1个包,直接使用pip安装。<br/>
+在这里,将用到的签名的方式单独提取出来进行讲解,对于相同产品其他的接口也是适用的,只是请求的参数有所变化而已。    </p>
+
+<h2>个人建议及使用的库</h2>
+
+<p>在正式讲述APP支付之前,我有如下的建议:    </p>
+
+<ol>
+<li>Python版本&gt;=2.7.9,由于Python版本2.7.9为1个bug修复版本,在这个版本中使用新的SSL模块,修复了之前HTTP客户端模块(比如urllib2,httplib)不对服务器证书进行校验的问题,详情请查看<a href="https://www.python.org/dev/peps/pep-0476/">PEP 476</a>。<br/></li>
+<li>使用lxml,而不是标准库中的XML库,主要在于标准库中的XML模块无法检验恶意构造的数据,详情请查看<a href="https://docs.python.org/2/library/xml.html#module-xml">Warning</a>。<br/></li>
+<li>使用pycrypto库用于支付宝RSA签名,版本&gt;=2.61。这里使用的是pycrypto,是因为安装比较方便,另外因为版本2.61之前在某种情况下,使用fork会出现随机数不安全的问题,详情请查看<a href="https://lists.dlitz.net/pipermail/pycrypto/2013q4/000702.html">CVE-2013-1445</a>。<br/></li>
+</ol>
+
+<h2>职责</h2>
+
+<p>下面我们需要理清我们要做的事情,避免不必要的工作。主要是如下2个方面:    </p>
+
+<ul>
+<li>服务端负责生成订单及签名,及接受支付异步通知<br/></li>
+<li>客户端负责使用服务端传来的订单信息调用支付接口,及根据SDK同步返回的支付结果展示结果页。<br/></li>
+</ul>
+
+<p>另外,私钥必须放在服务端,签名过程也必须放在服务端。      </p>
+
+<h2>支付方式比较</h2>
+
+<h3>共同点</h3>
+
+<p>在这2种支付方式中,我们需要对签名的信息(URL键值对,例如key1=value1&amp;key2=valu2&hellip;)按照ASCII编码顺序进行排序后再进行签名,并且采用POST方式进行提交。      </p>
+
+<h3>不同点</h3>
+
+<ol>
+<li>在微信中,签名的方式采用的是md5,而支付宝采用的RSA。<br/></li>
+<li>在微信支付中,提交和返回数据都为XML格式,其根节点为xml。而在支付宝中,采用的是使用表单提交的方式来进行。<br/></li>
+<li>由于微信支付采用的是XML格式,因此字符编码采用的是UTF-8,而支付宝需要指定参数<code>_input_charset</code>来指定编码,官方建议我们采用UTF-8。<br/></li>
+</ol>
+
+<p>下面我们正式进行APP支付流程的说明,在这个过程中,我们需要阅读官方提供的文档。这里我们从微信开始,因为相比支付宝,微信的支付调用更为简单些。      </p>
+
+<h2>微信</h2>
+
+<p>在进行模块代码编写之前,我们来看看官方提供的<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_3">流程图</a>。换句话说,在我们调用<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1">统一下单</a>接口后,我们需要给APP客户端返回<code>prepayid</code>及生成的签名,另外还有APP端<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_12">调起支付</a>接口中的其他字段。      </p>
+
+<h3>统一下单</h3>
+
+<p>这里,假设我们统一下单时请求参数如下:    </p>
+
+<pre>  
+appid=wx2421b1c4370ec43b&attach=支付测试&body=APP支付测试&mch_id=10000100&nonce_str=1add1a30ac87aa2db72f57a2375d8fec&notify_url=http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php&out_trade_no=1415659990&spbill_create_ip=14.23.150.211&total_fee=1&trade_type=APP  
+</pre>  
+  
+
+<p>而我们的商户号假设为<code>1900000109</code>,那么我们需要将商户号与之前的请求参数拼接在一起:    </p>
+
+<pre>  
+data = "appid=wx2421b1c4370ec43b&attach=支付测试&body=APP支付测试&mch_id=10000100&nonce_str=1add1a30ac87aa2db72f57a2375d8fec&notify_url=http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php&out_trade_no=1415659990&spbill_create_ip=14.23.150.211&total_fee=1&trade_type=APP&key=1900000109"    
+>>> from hashlib import md5    
+>>> md5(data).hexdigest().upper()    
+"F3D12D07612100A7F0DA652E97A766FA"  
+</pre>  
+  
+
+<p>这里我们拼接后的参数进行MD5加密后将其转换为大写字母,这样就得到我们需要的签名了。因此,在请求统一下单时,我们需要传递如下的字符串:    </p>
+
+<pre><code>&lt;xml&gt;    
+   &lt;appid&gt;wx2421b1c4370ec43b&lt;/appid&gt;    
+   &lt;attach&gt;支付测试&lt;/attach&gt;    
+   &lt;body&gt;APP支付测试&lt;/body&gt;    
+   &lt;mch_id&gt;10000100&lt;/mch_id&gt;    
+   &lt;nonce_str&gt;1add1a30ac87aa2db72f57a2375d8fec&lt;/nonce_str&gt;    
+   &lt;notify_url&gt;http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php&lt;/notify_url&gt;    
+   &lt;out_trade_no&gt;1415659990&lt;/out_trade_no&gt;    
+   &lt;spbill_create_ip&gt;14.23.150.211&lt;/spbill_create_ip&gt;    
+   &lt;total_fee&gt;1&lt;/total_fee&gt;    
+   &lt;trade_type&gt;APP&lt;/trade_type&gt;    
+   &lt;sign&gt;F3D12D07612100A7F0DA652E97A766FA&lt;/sign&gt;    
+&lt;/xml&gt;</code></pre>
+
+<p>关于签名校验,微信官方提供了1个<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=20_1">校验工具</a>,当在请求返回的<code>err_code</code>出现<code>SIGNERROR</code>时可以使用这个工具来辅助我们进行校验。      </p>
+
+<h3>返回给客户端APP</h3>
+
+<p>当我们成功请求统一下单接口后,返回的结果可能如下所示:    </p>
+
+<pre><code>&lt;xml&gt;    
+   &lt;return_code&gt;&lt;![CDATA[SUCCESS]]&gt;&lt;/return_code&gt;    
+   &lt;return_msg&gt;&lt;![CDATA[OK]]&gt;&lt;/return_msg&gt;    
+   &lt;appid&gt;&lt;![CDATA[wx2421b1c4370ec43b]]&gt;&lt;/appid&gt;    
+   &lt;mch_id&gt;&lt;![CDATA[10000100]]&gt;&lt;/mch_id&gt;    
+   &lt;nonce_str&gt;&lt;![CDATA[IITRi8Iabbblz1Jc]]&gt;&lt;/nonce_str&gt;    
+   &lt;sign&gt;&lt;![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]&gt;&lt;/sign&gt;    
+   &lt;result_code&gt;&lt;![CDATA[SUCCESS]]&gt;&lt;/result_code&gt;    
+   &lt;prepay_id&gt;&lt;![CDATA[wx201411101639507cbf6ffd8b0779950874]]&gt;&lt;/prepay_id&gt;    
+   &lt;trade_type&gt;&lt;![CDATA[APP]]&gt;&lt;/trade_type&gt;    
+&lt;/xml&gt;</code></pre>
+
+<p>接下来,我们需要取出返回结果中的<code>prepay_id</code>参数,然后按照<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_12&amp;index=2">调起支付</a>接口中组装请求参数,假设我们得到如下的请求参数:    </p>
+
+<pre>  
+appid=wx2421b1c4370ec43b&noncestr=5K8264ILTKCH16CQ2&package=Sign=WXPay&partnerid=1900000109&prepayid=wx201411101639507cbf6ffd8b0779950874&timestamp=1412000000  
+</pre>  
+  
+
+<p>那么进行签名后将得到字符串<code>0586C6E4A2AA6D297F4046362D878BAC</code>。那么我们返回给客户端APP的字段主要有<code>prepayid</code>、<code>noncestr</code>、<code>timestamp</code>、<code>sign</code>。      </p>
+
+<h3>异步回调</h3>
+
+<p>当用户成功完成支付后,微信会将相关支付信息推送到在统一下单时提交的<code>notify_url</code>指定的url地址中。在这一步,我们主要要做的是检验信息,比如签名是否正确、支付金额是否相同,可以在这个过程中修改订单的支付状态。<br/>
+如果检验通过后,我们需要给微信返回类似如下的参数:    </p>
+
+<pre><code>&lt;xml&gt;    
+  &lt;return_code&gt;&lt;![CDATA[SUCCESS]]&gt;&lt;/return_code&gt;    
+  &lt;return_msg&gt;&lt;![CDATA[OK]]&gt;&lt;/return_msg&gt;    
+&lt;/xml&gt;</code></pre>
+
+<p>在这一步可能遇到的问题是无法接收到微信推送过来的参数,由于这里公司采用的是Flask,因此采用如下的方式来进行接收:    </p>
+
+<pre><code>from flask import request    
+
+...    
+
+@app.route(&quot;/notify&quot;)    
+def notify():    
+   req = request.stream.read()    
+   ...</code></pre>
+
+<p>在这里,我采用的是从原始流中进行直接读取操作。<br/>
+说完了微信,我们来看下支付宝的情况。      </p>
+
+<h2>支付宝</h2>
+
+<p>这里我采用UTF-8编码进行处理,并查看如下的<a href="https://doc.open.alipay.com/doc2/detail?treeId=59&amp;articleId=103658&amp;docType=1">功能流程</a>,让我们对支付流程有1个了解。    </p>
+
+<h3>准备</h3>
+
+<p>在正式开始支付宝的支付之前,我们先来说下基础的一些内容,首先是要使用的私钥要是PKCS8格式的。然后是需要传递给支付宝的参数,其中基本参数<code>partner</code>、<code>_input_charset</code>、<code>sign</code>、<code>sign_type</code>、<code>service</code>这些属于基本参数,是必须要传递的参数。关于需要传递参数的内容请查阅<a href="https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.voEv3c&amp;treeId=58&amp;articleId=103590&amp;docType=1">参数</a>。    </p>
+
+<h3>支付待签名字符串生成</h3>
+
+<p>关于支付请求参数,我们可以查看下面的链接<a href="https://doc.open.alipay.com/doc2/detail?treeId=59&amp;articleId=103663&amp;docType=1">请求参数</a>。<br/>
+在支付宝APP支付中,我们需要请求参数中需要剔除<code>sign_type</code>、<code>sign</code>这2个参数,并在签名之前需要对字符串进行UTF-8的urlencode,即待签名字符串如果有中文则必须未转义形式显示,例如:    </p>
+
+<pre>_input_charset="utf-8"&notify_url="http://notify.msp.hk/notify.htm"&out_trade_no="0819145412-6177"&partner="2088101568338364"&seller_id="xxx@alipay.com"&service="mobile.securitypay.pay"&subject="测试"&payment_type="1"&total_fee="0.01"  
+</pre>  
+  
+
+<p>在这里,我们对请求的参数进行了排序,然后请求的参数的数值需要添加双引号。之后,我们需要对上面的字符串进行签名处理,这里我们假设我们的私钥如下:    </p>
+
+<pre>  
+-----BEGIN RSA PRIVATE KEY-----    
+MIICXAIBAAKBgQDQ3/XlPY/IFw8FISXKHVRLICPSEPmWCauMtKPoAc9M6szlCjG+    
+YqtxaigPwVdRqoG3m24uMgz36qXyANvXMB3X7e6t6g1DoI3wxy5aNNlE0Dlu0BIH    
+rcLUFsSZgCTuAvOori2oGVp6StXz0Wg5kacICnf6GNHCM1B2IgshEQte2wIDAQAB    
+AoGAMkbmanKiDFi4jdSHwxnCM38eAC+D1ECpoWnN1kexPWN7RFpq1NftSpRx5jD0    
+srynEqoAIHB9vKMnpJPeVvLHC8ZvtZyehQPTvdaqdeORcZUhaYHYBWgiCCr/6fgW    
+00yxR+UrYZFY6DEHbHkXgXqtEFzoVYIVwI6a90F/xFQ8hpECQQDoypOny/zUvocc    
+hTQ/JuqsmZXKNZgU+1c/3Kflz7RDpi9e94yR9eaBSLBTDEkngJkJD5/riTzC0O4A    
+Hb/2+5vzAkEA5bL5lgoCWyyVlvy/PBbZ2Ilcf+vMyvtyDBWklW9xrXEy53W+G4Qq    
+NSatTzNHN2VNEqFz2/3xNIbFlMpHzU3zeQJBAJS3thTgkKko/xANWQ9vQUT66WLB    
+UmM1HsxBn1GFm9gL9v9ojnlA6v10/pBPrPx7f0j2nmfOyO58o0+XseeLXlkCQB55    
+k2GTrGJaVPJ2UAzx3y86cjpKl54qpCP0TyTAZ22igiVxWqqd61en7QCABifUWdhp    
+8UwzsefNJbOq7sHPYMkCQACbuh1TKx9AlZz1kPoAagBsZofx4cb5QnHpmIzREbRd    
+aydfoaqR5BKpjJXky4tyBDeyp50s96UUd/eEYDC8RV4=    
+-----END RSA PRIVATE KEY-----  
+</pre>  
+  
+
+<p>在RSA签名就验证签名中,我们需要确保公钥和私钥都包含在BEGIN和END之间,且不需要进行将其放在1行中。<br/>
+然后我们使用如下的方式进行签名操作:    </p>
+
+<pre><code>from Crypto.Signature import PKCS1_v1_5    
+from Crypto.Hash import SHA    
+from Crypto.PublicKey import RSA    
+
+from base64 import b64encode    
+
+message = &quot;_input_charset=&quot;utf-8&quot;&amp;notify_url=&quot;http://notify.msp.hk/notify.htm&quot;&amp;out_trade_no=&quot;0819145412-6177&quot;&amp;partner=&quot;2088101568338364&quot;&amp;seller_id=&quot;xxx@alipay.com&quot;&amp;service=&quot;mobile.securitypay.pay&quot;&amp;subject=&quot;测试&quot;&amp;payment_type=&quot;1&quot;&amp;total_fee=&quot;0.01&quot;&quot;    
+key = RSA.importKey(open(&quot;rsa_private_key.pem&quot;).read())    
+h = SHA.new()    
+h.update(message)    
+signer = PKCS1_v1_5.new(key)    
+signature = signer.sign(h)    
+print b64encode(signature)</code></pre>
+
+<p>这样我们将得到签名:    </p>
+
+<pre>  
+FDW1YrI/FeX841orIDZ+rYyacSyDtWs4d+GPNpEMbWd38TpmePLagEIzAd8DDB3TlLxwyiA/IgGYIiLPQOk8qdIdp3AkjWHEMPmRbULZx2bMVNJlJy/yunOAbJRIJhP3I1Ip/nCFRVvBmBE3I8Mt95UQtYhtLkx+fZbuXmpCckQ=   
+</pre>  
+  
+
+<p>在这里,官方所说的是SHAWithRSA函数对应于<code>PKCS1_V1_5</code>标准外加SHA1加密方式,需要主要的是这里生成的私钥的长度是1024位。<br/>
+然后我们对参数字符串进行拼接将得到:    </p>
+
+<pre>  
+_input_charset="utf-8"&notify_url="http://notify.msp.hk/notify.htm"&out_trade_no="0819145412-6177"&partner="2088101568338364"&seller_id="xxx@alipay.com"&service="mobile.securitypay.pay"&subject="测试"&payment_type="1"&total_fee="0.01"&sign="FDW1YrI/FeX841orIDZ+rYyacSyDtWs4d+GPNpEMbWd38TpmePLagEIzAd8DDB3TlLxwyiA/IgGYIiLPQOk8qdIdp3AkjWHEMPmRbULZx2bMVNJlJy/yunOAbJRIJhP3I1Ip/nCFRVvBmBE3I8Mt95UQtYhtLkx+fZbuXmpCckQ="&sign_type="RSA"  
+</pre>  
+  
+
+<p>我们将生成的这串字符串返回给客户端APP调用即可。      </p>
+
+<h3>异步回调</h3>
+
+<p>与微信一样,当用户成功支付后,支付宝会主动以POST方式将数据推送给你提交的<code>notify_url</code>中的URL。在这里,我们需要以表单的形式来接收传递过来的参数。<br/>
+在此之前,我们说下一些关于通知的内容:    </p>
+
+<ul>
+<li>通知触发条件:支付宝只有在交易成功、支付成功以及交易创建是会触发通知,对于交易关闭时不触发通知的,换句话说在这些情况下会主动推送消息给你。<br/></li>
+<li>通知交易状态:主要有4种状态,<code>TRADE_SUCCESS</code>,<code>TRADE_FINISHED</code>、<code>TRADE_CLOSED</code>,<code>WAIT_BUYER_PAY</code>,分别对应交易成功、交易完成、交易关闭和等待买家付款。<br/></li>
+</ul>
+
+<p>而支付宝会传递过来的参数,我们可以查看<a href="https://doc.open.alipay.com/doc2/detail?treeId=59&amp;articleId=103666&amp;docType=1">服务器异步通知参数</a>。<br/>
+在异步回调中,我们需要完成如下2个验证的工作:    </p>
+
+<ul>
+<li>验证签名<br/></li>
+<li>验证是否是支付宝发来的通知<br/></li>
+</ul>
+
+<p>对于第2个验证,我们需要拼装成如下的URL:    </p>
+
+<pre>  
+https://mapi.alipay.com/gateway.do?service=notify_verify&partner=2088002396712354&notify_id=RqPnCoPT3K9%252Fvwbh3I%252BFioE227%252BPfNMl8jwyZqMIiXQWxhOCmQ5MQO%252FWd93rvCB%252BaiGg  
+</pre>  
+  
+
+<p>然后我们进行GET请求,而结果会返回1个true或false的字符串。<br/>
+对于第1种验证,假设我们有如下的字符串:    </p>
+
+<pre>  
+discount=0.00&payment_type=8&subject=测试&trade_no=2013082244524842&buyer_email=dlwdgl@gmail.com&gmt_create=2013-08-22 14:45:23&notify_type=trade_status_sync&quantity=1&out_trade_no=082215222612710&seller_id=2088501624816263&notify_time=2013-08-22 14:45:24&body=测试测试&trade_status=TRADE_SUCCESS&is_total_fee_adjust=N&total_fee=1.00&gmt_payment=2013-08-22 14:45:24&seller_email=xxx@alipay.com&price=1.00&buyer_id=2088602315385429&notify_id=64ce1b6ab92d00ede0ee56ade98fdf2f4c&use_coupon=N&sign_type=RSA&sign=1glihU9DPWee+UJ82u3+mw3Bdnr9u01at0M/xJnPsGuHh+JA5bk3zbWaoWhU6GmLab3dIM4JNdktTcEUI9/FBGhgfLO39BKX/eBCFQ3bXAmIZn4l26fiwoO613BptT44GTEtnPiQ6+tnLsGlVSrFZaLB9FVhrGfipH2SWJcnwYs=  
+</pre>  
+  
+
+<p>我们剔除了<code>sign</code>和<code>sign_type</code>参数后,按照ASCII顺序进行排序,我们将得到如下的字符串:    </p>
+
+<pre>  
+body=测试测试&buyer_email=dlwdgl@gmail.com&buyer_id=2088602315385429&discount=0.00&gmt_create=2013-08-22 14:45:23&gmt_payment=2013-08-22 14:45:24&is_total_fee_adjust=N&notify_time=2013-08-22 14:45:24&notify_type=trade_status_sync&out_trade_no=082215222612710&payment_type=8&price=1.00&quantity=1&seller_email=alipayrisk18@alipay.com&seller_id=2088501624816263&subject=测试&total_fee=1.00&trade_no=2013082244524842&trade_status=TRADE_SUCCESS&use_coupon=N  
+</pre>  
+  
+
+<p>然后我们进行如下的验证签名:    </p>
+
+<pre><code>from Crypto.Signature import PKCS1_v1_5    
+from Crypto.Hash import SHA    
+from Crypto.PublicKey import RSA    
+
+from base64 import b64decode    
+
+sign = &quot;1glihU9DPWee+UJ82u3+mw3Bdnr9u01at0M/xJnPsGuHh+JA5bk3zbWaoWhU6GmLab3dIM4JNdktTcEUI9/FBGhgfLO39BKX/eBCFQ3bXAmIZn4l26fiwoO613BptT44GTEtnPiQ6+tnLsGlVSrFZaLB9FVhrGfipH2SWJcnwYs=&quot;    
+
+msg = &quot;body=测试测试&amp;buyer_email=dlwdgl@gmail.com&amp;buyer_id=2088602315385429&amp;discount=0.00&amp;gmt_create=2013-08-22 14:45:23&amp;gmt_payment=2013-08-22 14:45:24&amp;is_total_fee_adjust=N&amp;notify_time=2013-08-22 14:45:24&amp;notify_type=trade_status_sync&amp;out_trade_no=082215222612710&amp;payment_type=8&amp;price=1.00&amp;quantity=1&amp;seller_email=alipayrisk18@alipay.com&amp;seller_id=2088501624816263&amp;subject测试&amp;total_fee=1.00&amp;trade_no=2013082244524842&amp;trade_status=TRADE_SUCCESS&amp;use_coupon=N&quot;    
+
+key = RSA.importKey(open(&quot;alipay_public_key.pem&quot;).read())    
+sign = b64decode(sign)    
+h = SHA.new(msg)    
+verifier = PKCS1_v1_5.new(key)    
+print verifier.verify(h,sign)</code></pre>
+
+<p>在这里,我们读取<strong>支付宝的公钥</strong>,然后对签名进行base64编码解密,然后进行比对操作,其结果为1个布尔值。<br/>
+最后,如果2个检验都通过,我们需要返回给支付宝1个字符串success即可。      </p>
+
+<p>参考文章:    </p>
+
+<blockquote>
+<p><a href="https://doc.open.alipay.com/doc2/detail?treeId=59&articleId=103927&docType=1">https://doc.open.alipay.com/doc2/detail?treeId=59&articleId=103927&docType=1</a><br/>
+<a href="https://doc.open.alipay.com/doc2/detail?treeId=58&articleId=103599&docType=1">https://doc.open.alipay.com/doc2/detail?treeId=58&articleId=103599&docType=1</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

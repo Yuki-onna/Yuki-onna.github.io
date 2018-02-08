@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="近期在帮助朋友做微信支付那方面的工作,由于要在之前开发人员的基础上进行开发,其中使用到了ping++这个第3方支付的SDK。不得不说,ping++的SDK做的挺简单的,但是其文档真心写的有点坑。不过相对其他的接入,坑少了那么一些。下面梳理下正常开发的流程,请点击下面的链接付款。可以看到主要有5个步骤">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="跳出ping++开发的坑">
+<meta name="twitter:description" content="近期在帮助朋友做微信支付那方面的工作,由于要在之前开发人员的基础上进行开发,其中使用到了ping++这个第3方支付的SDK。不得不说,ping++的SDK做的挺简单的,但是其文档真心写的有点坑。不过相对其他的接入,坑少了那么一些。下面梳理下正常开发的流程,请点击下面的链接付款。可以看到主要有5个步骤">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+跳出ping++开发的坑 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">跳出ping++开发的坑</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Apr 10, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>近期在帮助朋友做微信支付那方面的工作,由于要在之前开发人员的基础上进行开发,其中使用到了ping++这个第3方支付的SDK。不得不说,ping++的SDK做的挺简单的,但是其文档真心写的有点坑。不过相对其他的接入,坑少了那么一些。<br/>
+下面梳理下正常开发的流程,请点击下面的链接<a href="https://www.pingxx.com/guidance/server/charge/pay">付款</a>。<br/>
+可以看到主要有5个步骤:   </p>
+
+<ol>
+<li>设置 API-Key<br/></li>
+<li>SDK 验证签名设置<br/></li>
+<li>发起支付请求获取支付凭据<br/></li>
+<li>将获得的支付凭据传给 Client<br/></li>
+<li>接收 Webhooks通知(开启Live模式才有用)<br/></li>
+</ol>
+
+<p>然后再看下<a href="https://www.pingxx.com/guidance/products/sdk">SDK交易流程</a>,可以发现写的还是挺通俗易懂的。<br/>
+个人觉得比较坑爹的是它API文档的部分,完全就是逗你玩的。为什么这么说,请往下看。<br/>
+官方说Ping++的API采用REST风格设计,真的是REST风格,完全停留在CURD的阶段,离后面的发展还有很长的路要走。实话说,Github API写的还比较像REST些,而这个ping++的就不想说了。       </p>
+
+<h2>入坑</h2>
+
+<p>下面我们正式入坑,其最简单的方式如下,使用curl进行请求:     </p>
+
+<pre><code>curl https://api.pingxx.com/v1/charges \    
+     -u sk_test_ibbTe5jLGCi5rzfH4OqPW9KC:</code></pre>
+
+<p>官方采用Authentication Basic的方式进行验证,一般都会过的,返回你要的数据。但是官方提供的例子真心的简单,而且只用uncap这种方式,而我们公司要使用的是微信公众支付,那么坑就出来了。当时我是这样请求的:     </p>
+
+<pre><code>c@y-pc:~$ curl https://api.pingxx.com/v1/charges   -u sk_test_ibbTe5jLGi5rzfH4OqPW9KC:   -d order_no=123456789   -d amount=100   -d app[id]=app_1Gqj58ynP0mHeX1q   -d channel=wx_pub   -d currency=cny   -d client_ip=127.0.0.1   -d subject=&quot;Your Subject&quot;   -d body=&quot;Your Body&quot;   -d extra=&#39;{&quot;open_id&quot;:&quot;xxxxx&quot;}&#39;    
+{    
+    &quot;error&quot;: {    
+        &quot;type&quot;: &quot;invalid_request_error&quot;,    
+        &quot;message&quot;: &quot; 无效的参数 extra: 必须是一组键值对&quot;,    
+        &quot;param&quot;: &quot;extra&quot;    
+    }</code></pre>
+
+<p>注意,这里我们将channel修改为<code>wx_pub</code>了,因此必须添加1个extra字段,在该字段中有1个<code>open_id</code>必填的玩意。结果,总是提示extra必须是1组键值对。很明显,难道<code>extra=&#39;{&quot;open_id&quot;:&quot;xxxxx&quot;}</code>不是1个键值对吗,但是机器看不出来它是。        </p>
+
+<h2>出坑</h2>
+
+<p>后面,我们准备跳出这个坑,我们去看官方给我们提供的SDK中的例子,可以发现app[id]这里的id是以{&ldquo;id&rdquo;:&ldquo;xxxx&rdquo;}这样的方式存在的,而不是理解为app[id]这样1个字段,因此我们换个方式进行请求:     </p>
+
+<pre><code>curl https://api.pingxx.com/v1/charges   -u sk_test_ibbTe5jLGi5rzfH4OqPW9KC:   -d order_no=123456789   -d amount=100   -d app[id]=app_1Gqj58ynP0mHeX1q   -d channel=wx_pub   -d currency=cny   -d client_ip=127.0.0.1   -d subject=&quot;Your Subject&quot;   -d body=&quot;Your Body&quot;   -d extra[open_id]=xxxxx    
+{    
+    &quot;id&quot;: &quot;ch_C4O4CKXHCK48rnvn5CH8iP4G&quot;,    
+    &quot;object&quot;: &quot;charge&quot;,    
+    &quot;created&quot;: 1460257030,    
+    &quot;livemode&quot;: false,    
+    &quot;paid&quot;: false,    
+    &quot;refunded&quot;: false,    
+    &quot;app&quot;: &quot;app_1Gqj58ynP0mHeX1q&quot;,    
+    &quot;channel&quot;: &quot;wx_pub&quot;,    
+    &quot;order_no&quot;: &quot;123456789&quot;,    
+    &quot;client_ip&quot;: &quot;127.0.0.1&quot;,    
+    &quot;amount&quot;: 100,    
+    &quot;amount_settle&quot;: 100,    
+    &quot;currency&quot;: &quot;cny&quot;,    
+    &quot;subject&quot;: &quot;Your Subject&quot;,    
+    &quot;body&quot;: &quot;Your Body&quot;,    
+    &quot;extra&quot;: {    
+        &quot;open_id&quot;: &quot;xxxxx&quot;    
+    },    
+    &quot;time_paid&quot;: null,    
+    &quot;time_expire&quot;: 1460264230,    
+    &quot;time_settle&quot;: null,    
+    &quot;transaction_no&quot;: null,    
+    &quot;refunds&quot;: {    
+        &quot;object&quot;: &quot;list&quot;,    
+        &quot;url&quot;: &quot;/v1/charges/ch_C4O4CKXHCK48rnvn5CH8iP4G/refunds&quot;,    
+        &quot;has_more&quot;: false,    
+        &quot;data&quot;: []    
+    },    
+    &quot;amount_refunded&quot;: 0,    
+    &quot;failure_code&quot;: null,    
+    &quot;failure_msg&quot;: null,    
+    &quot;metadata&quot;: {},    
+    &quot;credential&quot;: {    
+        &quot;object&quot;: &quot;credential&quot;,    
+        &quot;wx_pub&quot;: {    
+            &quot;appId&quot;: &quot;wxmbrpg8tm1k04yzbt&quot;,    
+            &quot;timeStamp&quot;: 1460257030,    
+            &quot;nonceStr&quot;: &quot;25c7de13570a1b5f6d23614bdf49443d&quot;,    
+            &quot;package&quot;: &quot;prepay_id=1101000000160410rtepylz1surl5uzd&quot;,    
+            &quot;signType&quot;: &quot;MD5&quot;,    
+            &quot;paySign&quot;: &quot;10F1AACE79C0ED0E10EB4080D140F913&quot;    
+        }    
+    },    
+    &quot;description&quot;: null</code></pre>
+
+<p>这里我们将<code>open_id</code>放在extra中就成功了,这样才可以接收到。不得不说,这API调用完全就是1个坑。主要是官方没有提供明确的请求头信息给我们,导致我们一直在兜圈。<br/>
+所以,我不排除这文档就是1个实习生写的。不得不说,官方给我们提供了1个不知名的REST的scheme,如果不是过这个坑完全就是不知道它在弄哪样。比如jsonapi提供了这样1种请求方式,预计如果不说明,你也看不懂它写的是什么:     </p>
+
+<pre><code>GET /posts?include=author&amp;sort[posts]=-created,title&amp;sort[people]=name</code></pre>
+
+<p>下面是上述请求的响应头信息:     </p>
+
+<pre><code>c@y-pc:~$ curl https://api.pingxx.com/v1/charges   -u sk_test_ibbTe5jLGCi5rzfH4OqPW9KC:   -d order_no=123456789   -d amount=100   - app[id]=app_1Gqj58ynP0mHeX1q   -d channel=wx_pub   -d currency=cny   -d client_ip=127.0.0.1   -d subject=&quot;Your Subject&quot;   -d body=&quot;Your Body&quot;   -d extra[open_id]=xxxxx -v    
+*   Trying 121.43.74.100...    
+* Connected to api.pingxx.com (121.43.74.100) port 443 (#0)    
+* ALPN, offering http/1.1    
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH    
+* successfully set certificate verify locations:    
+*   CAfile: /etc/ssl/certs/ca-certificates.crt    
+  CApath: none    
+* TLSv1.2 (OUT), TLS header, Certificate Status (22):    
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):    
+* TLSv1.2 (IN), TLS handshake, Server hello (2):    
+* NPN, negotiated HTTP1.1    
+* TLSv1.2 (IN), TLS handshake, Certificate (11):    
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):    
+* TLSv1.2 (IN), TLS handshake, Server finished (14):    
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):    
+* TLSv1.2 (OUT), TLS change cipher, Client hello (1):    
+* TLSv1.2 (OUT), TLS handshake, Unknown (67):    
+* TLSv1.2 (OUT), TLS handshake, Finished (20):    
+* TLSv1.2 (IN), TLS change cipher, Client hello (1):    
+* TLSv1.2 (IN), TLS handshake, Finished (20):    
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256    
+* ALPN, server did not agree to a protocol    
+* Server certificate:    
+*    subject: C=CN; ST=Shanghai; L=Shanghai; O=Shanghai Jianmi Network Technology Co., LTD; OU=IT; CN=api.pingxx.com    
+*    start date: Nov 19 00:00:00 2015 GMT    
+*    expire date: Jan 17 23:59:59 2017 GMT    
+*    subjectAltName: api.pingxx.com matched    
+*    issuer: C=US; O=Symantec Corporation; OU=Symantec Trust Network; CN=Symantec Class 3 Secure Server CA - G4    
+*    SSL certificate verify ok.    
+* Server auth using Basic with user &#39;sk_test_ibbTe5jLGCi5rzfH4OqPW9KC&#39;    
+&lt; POST /v1/charges HTTP/1.1    
+&lt; Host: api.pingxx.com    
+&lt; Authorization: Basic c2tfdGVzdF9pYmJUZTVqTEdDaTVyemZINE9xUFc5S0M6    
+&lt; User-Agent: curl/7.47.1    
+&lt; Accept: */*    
+&lt; Content-Length: 163    
+&lt; Content-Type: application/x-www-form-urlencoded    
+&lt;     
+* upload completely sent off: 163 out of 163 bytes    
+&gt; HTTP/1.1 200 OK    
+&gt; Date: Sun, 10 Apr 2016 03:26:51 GMT    
+&gt; Content-Type: application/json;charset=utf-8    
+&gt; Content-Length: 1229    
+&gt; Connection: keep-alive    
+&gt; X-Powered-By: PHP/5.6.2    
+&gt; Access-Control-Allow-Methods: GET, POST, HEAD, OPTIONS, DELETE    
+&gt; Access-Control-Max-Age: 300    
+&gt; Access-Control-Allow-Credentials: true    
+&gt; Cache-Control: no-cache, no-store    
+&gt; Strict-Transport-Security: max-age=31536000; includeSubDomains</code></pre>
+
+<p>我们使用<code>-v</code>选项查看了其详细的内容,甚至连TCP的3次握手过程都可以看到。<br/>
+还有就是出错信息,最好看下面的链接<a href="https://www.pingxx.com/guidance/errmsg">报错信息</a>。     </p>
+
+<p>参考文章:     </p>
+
+<blockquote>
+<p><a href="https://www.pingxx.com/document/api/#api-charges">https://www.pingxx.com/document/api/#api-charges</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

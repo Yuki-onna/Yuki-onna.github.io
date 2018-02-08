@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="关于在同1个页面多个表单提交的问题,实际上是项目中遇到的1个小问题。关于这个问题,主要有2个需要解决的问题:  多个表单的渲染问题多个表单提交时外键的处理问题下面我们分别进行说明。当时在建模的时候使用了类似如下的方式:  from django.db import models  class Sto">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="Django中同一页面中的多表单处理">
+<meta name="twitter:description" content="关于在同1个页面多个表单提交的问题,实际上是项目中遇到的1个小问题。关于这个问题,主要有2个需要解决的问题:  多个表单的渲染问题多个表单提交时外键的处理问题下面我们分别进行说明。当时在建模的时候使用了类似如下的方式:  from django.db import models  class Sto">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+Django中同一页面中的多表单处理 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">Django中同一页面中的多表单处理</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Oct 16, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>关于在同1个页面多个表单提交的问题,实际上是项目中遇到的1个小问题。关于这个问题,主要有2个需要解决的问题:  </p>
+
+<ul>
+<li>多个表单的渲染问题<br/></li>
+<li>多个表单提交时外键的处理问题<br/></li>
+</ul>
+
+<p>下面我们分别进行说明。<br/>
+当时在建模的时候使用了类似如下的方式:  </p>
+
+<pre><code>from django.db import models  
+
+class Store(models.Model):  
+    name = models.CharField(&#39;名称&#39;, max_length=20)  
+    first = models.FloatField(&#39;首重&#39;)  
+    additional = models.FloatField(&#39;次重&#39;)  
+    img = models.ImageField(&#39;图片&#39;, upload_to=&#39;store/1&#39;)  
+
+class Depot(models.Model):  
+    s_name = models.ForeignKey(Store, verbose_name=&#39;仓库&#39;)  
+    src = models.CharField(&#39;始发地&#39;, max_length=20)  
+    dest = models.CharField(&#39;目的地&#39;, max_length=20)  
+    days = models.PositiveSmallIntegerField(&#39;需要的天数&#39;)  
+
+class Address(models.Model):  
+    s_name = models.ForeignKey(Store, verbose_name=&#39;仓库&#39;)  
+    country = models.CharField(&#39;国家&#39;, max_length=20)  
+    state = models.CharField(&#39;省份&#39;, max_length=10)  
+    city = models.CharField(&#39;城市&#39;, max_length=10)  
+    description = models.TextField(&#39;描述&#39;, blank=True)</code></pre>
+
+<p>在这里,1个仓库的数据主要由3个表组成,分别为它的一些基础信息,可以配送的范围、天数及其他一些附加信息组成。然后其页面如下所示:  </p>
+
+<p><img src="../static/django/1.jpg" alt="后台图片1"/>  </p>
+
+<h2>多表单渲染</h2>
+
+<p>而公司的需求就是我们要在商户端上让客户在创建仓库时填写上述的内容,由于我比较懒,而公司给出的时间也不是很充裕,于是直接使用ModelForm来实现,而不需要一一的创建表单了。换句话说,我们要将多个模型表在同1个页面中渲染出来,对于这样的问题,主要有4种解决的方案:  </p>
+
+<ul>
+<li>在1个form组件中使用多个模型表单类<br/></li>
+<li>使用django提供的modelform_factory来解决<br/></li>
+<li>使用第3方插件<a href="http://django-betterforms.readthedocs.io/en/latest/multiform.html">django-betterforms</a>或<a href="https://django-multipleformwizard.readthedocs.io/en/latest/readme/">django-multipleformwizard</a>这样的插件<br/></li>
+<li>使用元类,然后继承BaseForm进行表单的重写。<br/></li>
+</ul>
+
+<p>这里我们使用第1种解决方案来实现多个表单渲染的问题。<br/>
+这里我们在forms模块下新建3个模型表单类:  </p>
+
+<pre><code>from django.forms import ModelForm  
+from models import Store, Address, Depot  
+
+class StoreForm(ModelForm):  
+    class Meta:  
+        model = Store  
+        fields = &#39;__all__&#39;  
+
+class AddressForm(ModelForm):  
+    class Meta:  
+        model = Address  
+        exclude = [&#39;s_name&#39;]  
+
+class DepotForm(ModelForm):  
+    class Meta:  
+        model = Depot  
+        exclude = [&#39;s_name&#39;]</code></pre>
+
+<p>然后在视图中引入这3个表单:  </p>
+
+<pre><code>from django.shortcuts import render_to_response, HttpResponseRedirect  
+from django.template import RequestContext  
+from forms import StoreForm, AddressForm, DepotForm  
+
+def store_add(req):  
+    if req.method == &#39;POST&#39;:  
+       ...  
+    else:  
+        sf = StoreForm()  
+        af = AddressForm()  
+        df = DepotForm()  
+    return render_to_response(&#39;store_add.html&#39;, {  
+        &#39;sf&#39;: sf, &#39;af&#39;: af, &#39;df&#39;: df,  
+    }, context_instance=RequestContext(req))</code></pre>
+
+<p>默认情况下,我们先将对应的表单渲染出来先。在这里我们往模板中输出了多个变量,然后在模板中手动进行如下的处理:  </p>
+
+<pre><code>&lt;form action=&quot;&quot; method=&#39;post&#39; enctype=&#39;multipart/form-data&#39;&gt;  
+        {% csrf_token %}  
+        {{ sf.as_p }}  
+        {{ df.as_p }}  
+        {{ af.as_p }}  
+        &lt;input type=&quot;submit&quot; value = &quot;添加&quot; /&gt;  
+&lt;/form&gt;</code></pre>
+
+<p>在这里,我们在1个表单中输出多个表单,其页面如下所示:  </p>
+
+<p><img src="../static/django/2.jpg" alt="B端的效果图"/>  </p>
+
+<p>可以看到其效果与后台的页面相差不是很大,只是没有对应的样式而已。   </p>
+
+<h2>多表单提交外键处理</h2>
+
+<p>接着我们需要处理多个表单提交时的处理问题。  </p>
+
+<pre><code>def store_add(req):  
+    if req.method == &#39;POST&#39;:  
+        sf = StoreForm(req.POST, req.FILES)  
+        af = AddressForm(req.POST)  
+        df = DepotForm(req.POST)  
+        if sf.is_valid() and af.is_valid() and df.is_valid():  
+            sf.save()  
+            df.save()  
+            af.save()  
+            return HttpResponseRedirect(&#39;store&#39;)  
+    ...</code></pre>
+
+<p>在这里我们直接对这3个表单进行保存,结果出现了这样1个错误。  </p>
+
+<pre>  
+NOT NULL constraint failed: app_depot.s_name_id  
+</pre>  
+  
+
+<p>由于我们使用了1个外键进行了约束,而使用上述的方式会导致数据表中的<code>s_name_id</code>的字段数值为NULL,从而导致了错误。而上述的方式时直接就提交给数据库了,导致后面的外键无法被满足。为了解决这个问题,我们采用延迟提交给数据库的方式:  </p>
+
+<pre><code>def store_add(req):  
+    if req.method == &#39;POST&#39;:  
+        ...  
+        if sf.is_valid() and af.is_valid() and df.is_valid():  
+            form = sf.save(commit=False)  
+            sf.save()  
+            dform = df.save(commit=False)  
+            dform.s_name = form  
+            dform.save()  
+            aform = af.save(commit=False)  
+            aform.s_name = form  
+            aform.save()  
+            return HttpResponseRedirect(&#39;store&#39;)  
+    else:  
+        ...</code></pre>
+
+<p>在这里,我们先让第1张表先不提交,将其保存为1个变量form中。而第2个张表也先不提交,我们将其实例的s_name修改为之前的第1张表返回的结果,然后再进行保存。这样我们就实现了多张表的依赖导致的问题了。最后我们使用重定向的方式将成功添加后的页面跳转到该商户的仓库列表中。<br/>
+其跳转后的页面如下所示:  </p>
+
+<p><img src="../static/django/3.jpg" alt="B端操作成功后的页面"/>  </p>
+
+<p>这样我们就解决了在1个页面提交多个表单的问题。实际关于Django在1个页面提交多个表单的问题,实际上问题不是很多,只要解决了渲染和提交时处理的问题,实际这个问题就迎刃而解了。重要的是如何拆分问题和解决问题的思路。    </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="http://stackoverflow.com/questions/16511399/django-multi-form-save">http://stackoverflow.com/questions/16511399/django-multi-form-save</a>  </p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

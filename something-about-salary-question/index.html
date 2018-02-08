@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="之前自己对薪资中的五险一金及个人所得税都是糊里糊涂的,因为感觉这东西比较难算而且也无从下手,毕竟官方文档都不知道在哪,网上的文档也不怎么权威,最主要的是觉得耗费那么多时间为这么1点钱不值得。由于有1个异性朋友问到这么1个问题,还真被问倒了,于是只好花点时间来研究下这个玩意是怎么算的。    个人所得">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="关于薪资中五险一金及税后工资的计算">
+<meta name="twitter:description" content="之前自己对薪资中的五险一金及个人所得税都是糊里糊涂的,因为感觉这东西比较难算而且也无从下手,毕竟官方文档都不知道在哪,网上的文档也不怎么权威,最主要的是觉得耗费那么多时间为这么1点钱不值得。由于有1个异性朋友问到这么1个问题,还真被问倒了,于是只好花点时间来研究下这个玩意是怎么算的。    个人所得">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+关于薪资中五险一金及税后工资的计算 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">关于薪资中五险一金及税后工资的计算</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/other/">other</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Dec 07, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>之前自己对薪资中的五险一金及个人所得税都是糊里糊涂的,因为感觉这东西比较难算而且也无从下手,毕竟官方文档都不知道在哪,网上的文档也不怎么权威,最主要的是觉得耗费那么多时间为这么1点钱不值得。<br/>
+由于有1个异性朋友问到这么1个问题,还真被问倒了,于是只好花点时间来研究下这个玩意是怎么算的。    </p>
+
+<h2>个人所得税</h2>
+
+<p>首先我们先来看下个人所得税的计算,在广州个人所得税分7级阶梯,实话说就是中学学的等差数列,只是常数项为3500元最为最低征税起点,我们可以使用如下公式来表示:  </p>
+
+<pre>个人所得税=(个人税前工资-最低征税点)*税率-速算扣除数,其中个人税前工资>3500元  
+</pre>  
+  
+
+<p>而税率表又分为3个,分别为:  </p>
+
+<ul>
+<li>工资、薪金所得<br/></li>
+<li>个体工商户的生产、经营所得和对企事业单位的承包经营、承租经营所<br/></li>
+<li>劳务报酬<br/></li>
+</ul>
+
+<p>这里我们来看第1种,使用如下的表格来表示:  </p>
+
+<table><thead><tr><th>级数</th><th>扣除征税点后薪金</th><th>税率(%)</th><th>速算扣除数</th></tr></thead><tbody><tr><td>1</td><td>&lt;1500</td><td>3</td><td>0</td></tr><tr><td>2</td><td>1500&lt;x&lt;4500</td><td>10</td><td>105</td></tr><tr><td>3</td><td>4500&lt;x&lt;9000</td><td>20</td><td>555</td></tr><tr><td>4</td><td>9000&lt;x&lt;35000</td><td>25</td><td>1005</td></tr><tr><td>&hellip;</td><td>&hellip;&hellip;&hellip;&hellip;.</td><td>&hellip;&hellip;.</td><td>&hellip;&hellip;&hellip;</td></tr></tbody></table>  
+  
+
+<p>虽然征税有7级,对于我们平常老百姓能达到4级都可以偷笑了。<br/>
+下面举1个最简单的例子,比如你薪资是11000元(不缴五险一金的情况),那么个人所得税按照如下的方式进行计算:  </p>
+
+<pre>(11000-3500)=7500  
+</pre>  
+  
+
+<p>首先我们用税前工资减去征税点,得到数字是7500,可以可以看到你当前薪资位于第3级,因此税率是20%,于是有:  </p>
+
+<pre>7500*20%-555=945元  
+</pre>  
+  
+
+<p>那么你的个人所得税就是945块,那么你税后薪资就是11000-945=10055元。    </p>
+
+<h2>五险一金</h2>
+
+<p>下面我们来看五险一金的内容,五险一金分别是:  </p>
+
+<ul>
+<li>养老保险<br/></li>
+<li>失业保险<br/></li>
+<li>工伤保险<br/></li>
+<li>生育保险<br/></li>
+<li>医疗保险<br/></li>
+<li>住房公积金<br/></li>
+</ul>
+
+<p>据说现在五险一金中的生育保险被合并了,因此就变成四险一金了。<br/>
+关于五险一金的缴纳,会根据当地公布的月缴费基数来进行,是1个动态变化的过程。<br/>
+下面来看下最新广州这些数据:  </p>
+
+<table><thead><tr><th>名称</th><th>基数上限</th><th>基数下限</th><th>个人缴纳比例</th></tr></thead><tbody><tr><td>养老</td><td>16575</td><td>2906</td><td>8%</td></tr><tr><td>医疗</td><td>20292</td><td>4058</td><td>2%</td></tr><tr><td>工伤</td><td>20292</td><td>1895</td><td>0%</td></tr><tr><td>失业</td><td>20292</td><td>1895</td><td>0.2%</td></tr><tr><td>生育</td><td>20292</td><td>4058</td><td>0%</td></tr></tbody></table>  
+  
+
+<p>可以看到,工伤和生育保险个人都是不需要缴费的,而是由企业缴纳。而计算的方式是按照权重的方式来进行,一般公司都是选择按照基数给你计算的,因此五险一金的计算方式为:  </p>
+
+<pre>2906*8%+1895*0.2%+4058*2%=317.43  
+</pre>  
+  
+
+<p>因此你要缴费的五险一金的是317.43元,而公司要缴纳的是你的2倍有多,因此要好好工作才行。<br/>
+而公积金的缴纳是根据公积金基数及缴纳的比例来计算的,另外公积金还有额外的汇缴补充住房公积金。这里我们就不讨论这种情况了。我们看简单的情况,由于公积金基数与该市最低工资挂钩,当前广州最低的基本工资是1895块,而缴纳的比例为5%-12%,当然企业是按5%计算的:  </p>
+
+<pre>1895 * 5% = 94.75</pre>  
+  
+
+<p>最后,假设你月薪11000元,那么最终得到的薪资为:  </p>
+
+<pre>(11000-94.75-317.43) = 10587.82  
+10587.82 - ((10587.82 - 3500) *0.2-555) = 10587.82 - 862.56 = 9725.26  
+</pre>  
+  
+
+<p>可以看到你拿到收的薪资就只有9725.26了,在广州你已经属于高收入人员了,如果有工作介绍希望你带上我。    </p>
+
+<p><img src="../static/common/richman.jpg" alt="土豪我们做朋友把"/>  </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="http://gz.123662.gov.cn/gztax/ssjczs/201506/8b74500ed8674e1e810e6eff1fc924c6.shtml">http://gz.123662.gov.cn/gztax/ssjczs/201506/8b74500ed8674e1e810e6eff1fc924c6.shtml</a><br/>
+<a href="http://gz.123662.gov.cn/gztax/qita2/201607/78483ddc0b1e447884cba60fb6d0ff2e.shtml">http://gz.123662.gov.cn/gztax/qita2/201607/78483ddc0b1e447884cba60fb6d0ff2e.shtml</a><br/>
+<a href="http://gz.123662.gov.cn/gztax/sybx2/201507/082a5831e5ad4266950cbfe9a8bb48f0.shtml">http://gz.123662.gov.cn/gztax/sybx2/201507/082a5831e5ad4266950cbfe9a8bb48f0.shtml</a><br/>
+<a href="http://gz.123662.gov.cn/gztax/sybx/201507/6d0b4a72fe33456c92fc6a65d2d6dc33.shtml">http://gz.123662.gov.cn/gztax/sybx/201507/6d0b4a72fe33456c92fc6a65d2d6dc33.shtml</a><br/>
+<a href="http://gz.123662.gov.cn/gztax/gsbx/201506/7e1fc428a1a4442490fac3d5d4822724.shtml">http://gz.123662.gov.cn/gztax/gsbx/201506/7e1fc428a1a4442490fac3d5d4822724.shtml</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

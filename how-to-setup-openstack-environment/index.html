@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="关于openstack这个IaaS项目,很早之前就已经有所闻,只是一时找不到时间来实践。而在chuanbay的时候,由于公司领导希望能进行一些前沿的机器学习技术,当然想到的就是通过虚拟机的方式来实现,至于为什么没有考虑到流行的docker、coreos之类的,主要还是在于这个项目是用python编写">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="快速搭建openstack环境">
+<meta name="twitter:description" content="关于openstack这个IaaS项目,很早之前就已经有所闻,只是一时找不到时间来实践。而在chuanbay的时候,由于公司领导希望能进行一些前沿的机器学习技术,当然想到的就是通过虚拟机的方式来实现,至于为什么没有考虑到流行的docker、coreos之类的,主要还是在于这个项目是用python编写">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+快速搭建openstack环境 | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">快速搭建openstack环境</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/python/">python</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Dec 05, 2016</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>关于openstack这个IaaS项目,很早之前就已经有所闻,只是一时找不到时间来实践。而在chuanbay的时候,由于公司领导希望能进行一些前沿的机器学习技术,当然想到的就是通过虚拟机的方式来实现,至于为什么没有考虑到流行的docker、coreos之类的,主要还是在于这个项目是用python编写的。<br/>
+而搭建openstack环境最快的方式是通过devstack,当然如果你购买的是第3方的服务其实也是不错的。<br/>
+在开始搭建之前,我们先对openstack的组件进行简单的介绍:  </p>
+
+<ul>
+<li>nova,计算部分,用于管理虚拟机实例的整个生命周期,根据用户需求来提供虚拟服务,负责虚拟机的创建、开机、关机、挂起、调整、迁移等操作,是openstack中最为成熟的项目。<br/></li>
+<li>swift,对象存储,允许进行存储或检索文件。<br/></li>
+<li>glance,镜像服务,用于虚拟机镜像查找及检索。<br/></li>
+<li>keystone,身份服务,为openstack提供身份验证、服务规则及服务令牌的功能。<br/></li>
+<li>cinder,块存储,为允许实例提供稳定的数据块存储服务。<br/></li>
+<li>horizon,UI界面,采用Django进行开发。<br/></li>
+<li>neutron,网络地址管理,为openstack提供网络连接服务。<br/></li>
+</ul>
+
+<p>下面我们来介绍如何通过devstack来快速搭建openstack环境。<br/>
+首先最简单的方式就是使用git下载这个项目<a href="https://github.com/makelinux/devstack-install-on-iso">devstack-install-on-iso</a>,然后进行如下的操作:  </p>
+
+<pre>./devstack-install-on-iso  
+</pre>  
+  
+
+<p>这个脚本会首先查找用户的Downloads目录下是否有1个ubuntu-14.04.4-server-amd64.iso的镜像,如果没有则会使用wget从官方网站进行下载。<br/>
+之后就是一系列的操作,并通过qemu的方式来运行这个镜像。<br/>
+另外1种方式就是通过每个发行版的仓库的方式来进行安装,比如在launchpad.net上的<a href="https://launchpad.net/devstack">版本</a>,这种方式安装的版本会比较老些。<br/>
+如果想实现较为新的版本,我们可以通过github上拉取代码来进行安装,在这里我们安装最新版本newton。<br/>
+下面我们通过git下来上面的代码:  </p>
+
+<pre>git clone git@github.com:openstack-dev/devstack.git  
+</pre>  
+  
+
+<p>然后我们切换到对应的目录下进行如下的命令即可:  </p>
+
+<pre>git checkout stable/newton  
+./stack.sh  
+</pre>  
+  
+
+<p>如果一切都这么简单就好了。由于国内的一些网络之类的问题,你会发现通过上述的方式安装是极其耗费时间的,在这里我们先进行一些优化的处理操作后再进行上述的操作。<br/>
+首先是加速Python源,为了加快下载的速度,在这里我们采用豆瓣的源而不是使用官方的源:  </p>
+
+<pre># emacs ~/.pip/pip.conf  
+</pre>  
+  
+
+<p>然后填入如下的内容:  </p>
+
+<pre>[global]  
+timeout = 6000  
+trusted-host = pypi.douban.com  
+index-url = http://pypi.douban.com/simple/  
+</pre>  
+  
+
+<p>接着我们对debian的官方源进行修改,我们采用网易的源:  </p>
+
+<pre># emacs /etc/apt/sources.list  
+</pre>  
+  
+
+<p>然后其内容为:  </p>
+
+<pre>deb http://mirrors.163.com/debian wheezy main contrib non-free  
+...  
+</pre>  
+  
+
+<p>接着我们在devstack目录下创建1个local.conf的文件,然后输入如下的内容:  </p>
+
+<pre>[local|localrc]]  
+DATABASE_PASSWORD=123456  
+ADMIN_PASSWORD=123456  
+SERVICE_PASSWORD=123456  
+SERVICE_TOKEN=123456  
+RABBIT_PASSWORD=123456  
+</pre>  
+  
+
+<p>上述的操作是openstack最小化配置,而详细的配置可以<a href="http://docs.openstack.org/developer/devstack/configuration.html#minimal-configuration">查阅</a>。<br/>
+之后我们再执行<code>./stack.sh</code>文件就会开始安装了。<br/>
+在这个过程中,本人使用了12M的带宽,耗费了将近1个小时就完成了安装操作。<br/>
+最后我们来最终的截图:  </p>
+
+<p><img src="../static/openstack/openstack_1.jpg" alt="openstack1"/>  </p>
+
+<p>这里是登录的页面,默认情况下系统给我们生成2个用户admin和demo,然后输入我们之前配置时的密码即可。<br/>
+接着是登录之后system部分的页面:  </p>
+
+<p><img src="../static/openstack/openstack_2.jpg" alt="openstack2"/>  </p>
+
+<p>我们可以看到此时只有1台虚拟机,主机名称为debian。<br/>
+最后是项目的描述。  </p>
+
+<p><img src="../static/openstack/openstack_3.jpg" alt="openstack3"/>  </p>
+
+<p>实话说,openstack是挺占用内存的1个项目。本人的4G内存,2核的PC机器在登录都感觉很慢。而在实际生产环境中,整个集群最小的内存必须是16GB才可以比较好的运转。    </p>
+
+<p>参考文章:  </p>
+
+<blockquote>
+<p><a href="https://wiki.openstack.org/wiki/DevStack">https://wiki.openstack.org/wiki/DevStack</a></p>
+</blockquote>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>

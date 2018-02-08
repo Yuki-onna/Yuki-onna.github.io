@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+
+<meta name="description" content="在项目的开发中,时常我们需要将数据库中的数据渲染到页面中。有些时候,我们需要给客户提供下载该页面数据的功能,而我们一般的做法就是在客户点击下载按钮的时候,重新根据条件搜索数据库中的数据,然后后端程序将数据输出到文件中,从而实现下载的功能。有时候,我们在思考1个问题,我们能否通过Javascript将">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="twitter">
+<meta name="twitter:title" content="如何使用js导出数据到excel">
+<meta name="twitter:description" content="在项目的开发中,时常我们需要将数据库中的数据渲染到页面中。有些时候,我们需要给客户提供下载该页面数据的功能,而我们一般的做法就是在客户点击下载按钮的时候,重新根据条件搜索数据库中的数据,然后后端程序将数据输出到文件中,从而实现下载的功能。有时候,我们在思考1个问题,我们能否通过Javascript将">
+<meta name="twitter:creator" content="twitter">
+
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>
+如何使用js导出数据到excel | The Kite in the wind
+</title>
+	    <!-- css -->
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/bootstrap.min.css?v=58a49b3689d699cb72ffda7252d99fcb">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/ionicons.min.css?v=fd8c7fe3ac6bc2f983e7c82df7d81cba">
+		<link rel="stylesheet" href="http://blog.52sox.com/static/css/pace.css?v=f3bc0312640b59259d031901cdd4987c">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/css/custom.css?v=f4b4f74649280695428e1340e11b83fd">
+	    <link rel="stylesheet" href="http://blog.52sox.com/static/layui/css/layui.css?v=555bcaf4d7abad3b6961f811ac697117">
+	    <!-- js -->
+	    <script src="http://blog.52sox.com/static/js/jquery-2.1.3.min.js?v=0bdc04968d2fe6799360150868a8b8b6"></script>
+	    <script src="http://blog.52sox.com/static/js/bootstrap.min.js?v=046ba2b5f4cff7d2eaaa1af55caa9fd8"></script>
+	    <script src="http://blog.52sox.com/static/js/pace.min.js?v=0131660a2d02706fa5075e150fa59803"></script>
+	    <script src="http://blog.52sox.com/static/js/modernizr.custom.js?v=b3248cc9192fab5de10bddf326a6d5fc"></script>
+	    <script src="http://blog.52sox.com/static/layui/layui.js?v=e66bb71f17d56a8640adb3c9128c0cb5"></script>
+	    <link rel="alternate" type="application/rss+xml" href="http://blog.52sox.com/feed.xml" title="The Kite in the wind" />
+        <link rel="canonical" href=""/>
+	    
+    
+
+	</head>
+
+	<body>
+		<div class="container">	
+			<header id="site-header">
+				<div class="row">
+					<div class="col-md-4 col-sm-5 col-xs-8">
+						<ul class="layui-nav layui-bg-green">
+							<img src="http://blog.52sox.com/static/fly_kite.png?v=c555c8feda1ee1bcdaebb1f5d39af62c">
+							<li class="layui-nav-item"><a href="http://blog.52sox.com/" style="font-size:24px;">The Kite in the wind</a></li>
+						</ul>
+					</div><!-- col-md-4 -->
+					<div class="col-md-8 col-sm-7 col-xs-4">
+						<nav class="main-nav" role="navigation">
+							<div class="navbar-header">
+  								<button type="button" id="trigger-overlay" class="navbar-toggle">
+    								<span class="ion-navicon"></span>
+  								</button>
+							</div>
+							<div class="navbar-header">
+								<button type="button" id="trigger-overlay" class="navbar-toggle">
+								<span class="ion-navicon"></span>
+								</button>
+							</div>
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  								<ul class="nav navbar-nav navbar-right">
+  									
+    								<li class="cl-effect-11"><a href="http://blog.52sox.com/about/">关于我</a></li>
+    								
+  								</ul>
+							</div>
+						</nav>
+					</div><!-- col-md-8 -->
+				</div>
+			</header>
+		</div>
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						
+<article class="post post-1">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <h1 class="entry-title">如何使用js导出数据到excel</h1>
+        </h1>
+        <div class="entry-meta">
+			
+			<span class="post-category"><a href="http://blog.52sox.com/tag/js/">js</a></span>
+			
+			<span class="post-date"><a href="#"><time class="entry-date">Jul 12, 2015</time></a></span>
+
+			<span class="post-author"><a href="#">我勒个去</a></span>
+		</div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>在项目的开发中,时常我们需要将数据库中的数据渲染到页面中。有些时候,我们需要给客户提供下载该页面数据的功能,而我们一般的做法就是在客户点击下载按钮的时候,重新根据条件搜索数据库中的数据,然后后端程序将数据输出到文件中,从而实现下载的功能。<br/>
+有时候,我们在思考1个问题,我们能否通过Javascript将这些数据导出到excel中呢?<br/>
+可能大部分开发人员会不假思索的回答,不能。Javascript怎么可能把数据导出到文件中呢。<br/>
+如果Javascript无法将数据导出到文件中,那么这里就没必要写这篇文章了。当然,单凭Javascript是无法完全做到的,我们还需要借助浏览器这个常常被我们忽略的角色。其实很多东西是它在起关键性作用。<br/>
+我们首先从IE浏览器说起。这里我们将导出的过程封装成1个函数:    </p>
+
+<pre><code>function exportExcel(table_id){    
+        var table = document.getElementById(table_id);  
+        var obj = new ActiveXObject(&quot;Excel.Application&quot;);   
+        var wb = obj.Workbooks.Add();  
+        var sheet = wb.ActiveSheet;  
+        var len = table.rows.length;    
+        for(i=0;i&lt;len;i++){    
+          var l = table.rows(i).cells.length;    
+          for(j=0j&lt;lj++){    
+            sheet.Cells(i+1,j+1).value = table.rows(i).cells(j).innerText;         
+          }    
+        }    
+        obj.Visible =true;  
+}</code></pre>
+
+<p>这里,我们初始化1个ActiveXObject对象,然后调用该实例的Add方法创建1个Excel表单对象。后面的操作和我们在后端中编写的代码比较类似,只是我们将表格的内容赋值给之前Excel表单对象。<br/>
+现在假设,我们有这样一段HTML数据:    </p>
+
+<pre><code>&lt;style type=&quot;text/css&quot;&gt;  
+.tg  {border-collapse:collapseborder-spacing:0}    
+.tg td{font-family:Arial, sans-seriffont-size:14pxpadding:10px 5pxborder-style:solidborder-width:1pxoverflow:hiddenword-break:normal}    
+.tg th{font-family:Arial, sans-seriffont-size:14pxfont-weight:normalpadding:10px 5pxborder-style:solidborder-width:1pxoverflow:hiddenword-break:normal}    
+.tg .tg-yw4l{vertical-align:top}    
+&lt;/style&gt;  
+&lt;table id=&quot;tg&quot;&gt;    
+  &lt;tr&gt;    
+    &lt;th class=&quot;tg-yw4l&quot;&gt;国家&lt;/th&gt;    
+    &lt;th class=&quot;tg-yw4l&quot;&gt;人口&lt;/th&gt;    
+    &lt;th class=&quot;tg-yw4l&quot;&gt;语言&lt;/th&gt;    
+    &lt;th class=&quot;tg-yw4l&quot;&gt;皮肤&lt;/th&gt;    
+    &lt;th class=&quot;tg-yw4l&quot;&gt;面积&lt;/th&gt;    
+  &lt;/tr&gt;    
+  &lt;tr&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;中国&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;15亿&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;汉语&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;黄&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;960万&lt;/td&gt;    
+  &lt;/tr&gt;    
+  &lt;tr&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;美国&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;2亿&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;英语&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;白&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;953万&lt;/td&gt;    
+  &lt;/tr&gt;    
+  &lt;tr&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;英国&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;不详&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;英语&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;白&lt;/td&gt;    
+    &lt;td class=&quot;tg-yw4l&quot;&gt;不详&lt;/td&gt;    
+  &lt;/tr&gt;    
+&lt;/table&gt;</code></pre>
+
+<blockquote>
+<p>需要注意的是,当前运行的系统中必须已经安装了Office套件,比如WPS Office。      </p>
+</blockquote>
+
+<p>然后我们点击导出按钮,将当前表单的id传递给exportExcel函数,即可打开1个Excel文件,显示其内容了。在这个过程中,IE浏览器会弹出1个对话框来询问我们是否进行这个操作。<br/>
+这里,我们在虚拟机中运行IE6,我们可以看到这样的1个情况:    </p>
+
+<p><img src="../static/javascript/ie6.jpg" alt="ie6"/>  </p>
+
+<p>当个我们点击确定后,出现如下的页面:    </p>
+
+<p><img src="../static/javascript/ie6-export.jpg" alt="ie6"/>  </p>
+
+<p>而在IE10下,弹出这样1个对话框:    </p>
+
+<p><img src="../static/javascript/ie10.jpg" alt="ie10"/>  </p>
+
+<p>说完了IE的情况,你可能会说,那其他厂商的浏览器怎么办,比如Firefox、Chrome,它们怎么办好呢。<br/>
+不用急,我们可以使用1个jquery的插件<a href="https://github.com/kayalshri/tableExport.jquery.plugin/">tableExport</a>。<br/>
+我们可以将这个插件从git上下载下载。<br/>
+这个插件比较强大,支持导出表单内容为JSON、XML、PNG、SQL、PDF、TXT等。这里我们克隆1份下来:    </p>
+
+<pre><code>cat@yafeile-pc:~$ git clone https://github.com/kayalshri/tableExport.jquery.plugin.git    
+Cloning into &quot;tableExport.jquery.plugin&quot;...    
+remote: Counting objects: 120, done.    
+remote: Total 120 (delta 0), reused 0 (delta 0), pack-reused 120    
+Receiving objects: 100% (120/120), 477.28 KiB | 34.00 KiB/s, done.    
+Resolving deltas: 100% (28/28), done.    
+Checking connectivity... done.</code></pre>
+
+<p>然后我们在页面中导入以下几个文件:    </p>
+
+<pre><code>&lt;script src=&quot;jquery-1.7.2.min.js&quot;&gt;&lt;/script&gt;    
+&lt;script src=&quot;jquery.base64.js&quot;&gt;&lt;/script&gt;    
+&lt;script src=&quot;tableExport.js&quot;&gt;&lt;/script&gt;</code></pre>
+
+<p>然后我们为点击的按钮添加点击是事件,其代码为:    </p>
+
+<pre><code>&lt;button onclick=&quot;$(&quot;tg&quot;).tableExport({type:&quot;excel&quot;,escape:&quot;false&quot;})&quot;&gt;导出&lt;/button&gt;</code></pre>
+
+<p>这里我们通过type参数指定其类型,由于这里我们要导出的是excel,因为这里填写为excel。<br/>
+当我们点击导出按钮时,将弹出通常下载的对话框,如下所示:    </p>
+
+<p><img src="../static/javascript/xp-firefox.jpg" alt="firefox"/>  </p>
+
+<p>这样,我们便实现了使用Javascript导出excel的目的了。   </p>
+
+    </div>
+</article>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2157299"></script>
+<!-- UY END -->
+<p>若文章对您有帮助,请打赏1块钱。您的支持,可以让我分享更多精彩的文章。转载请注明来源</p>
+
+<img src="/static/common/alipay_qrcode.jpg" /><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/2.5/cn/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议</a>进行许可。
+
+
+					</main>
+					<aside class="col-md-4">
+						<div class="widget widget-archives">
+							<h3 class="widget-title">推荐博客</h3>
+							<ul>
+								<li>
+									<a href="http://www.jianshu.com/u/bc20802968ab">Little曾iOS修行记</a>
+								</li>
+								<li>
+									<a href="http://blog.yubangweb.com/">yubang的后端研发路</a>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget-archives">		
+							<h3 class="widget-title">归档</h3>
+							<ul>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2018(10)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2017(48)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2016(45)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2015(4)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="/archive/index.html">2014(2)</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="widget-category">		
+							<h3 class="widget-title">标签</h3>		
+							<ul>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/python/">python (52)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/linux/">linux (19)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/other/">other (18)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/database/">database (8)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/redis/">redis (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/math/">math (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/cryptography/">cryptography (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/web/">web (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/R/">R (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/language/">language (3)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/PyQt5/">PyQt5 (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tours/">tours (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/visualization/">visualization (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/flask/">flask (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/tornado/">tornado (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/mongodb/">mongodb (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/matplotlib/">matplotlib (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/windows/">windows (2)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pyramid/">pyramid (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/protocol/">protocol (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nosql/">nosql (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/statistics/">statistics (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/network/">network (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/character/">character (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/twisted/">twisted (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/memcached/">memcached (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/pandas/">pandas (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/wireshark/">wireshark (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/notice/">notice (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/js/">js (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/nginx/">nginx (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/html5/">html5 (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/data/">data (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/svg/">svg (1)</a>
+								</li>
+								
+								<li>
+									<a class="tag green" href="http://blog.52sox.com/tag/orm/">orm (1)</a>
+								</li>
+								
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+		<footer id="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="copyright">Powered by <a href="http://github.com/whtsky/catsup">Catsup</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="http://blog.52sox.com/static/js/script.js?v=dc75ac69a0ce8bfc460d205adf55a046"></script>
+	</body>
+</html>
